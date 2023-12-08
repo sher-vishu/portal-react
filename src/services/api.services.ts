@@ -29,7 +29,7 @@ const useApi = () => {
           return null;
         }
         console.log(endpoint, 'calling api')
-        const response = await axios.post('http://127.0.0.1:9502'+endpoint, data, {
+        const response = await axios.post('http://127.0.0.1:8002'+endpoint, data, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
