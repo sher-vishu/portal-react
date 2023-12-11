@@ -2,10 +2,13 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useAuth0 } from '@auth0/auth0-react';
-import { Button, Stack } from '@chakra-ui/react'
+import { Button, Stack, Text } from '@chakra-ui/react'
 
 const navigation = [
- { name: 'Service', href: '#', current: true },
+ { name: 'Calendar', href: '/matchlist', current: true },
+ { name: 'Teams', href: '#', current: false },
+ { name: 'Player Ranking', href: '#', current: false },
+ { name: 'Team Ranking', href: '#', current: false },
 ]
 
 function classNames(...classes: string[]) {
@@ -16,7 +19,7 @@ export default function Nav() {
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
 
   return (
-    <Disclosure as="nav" style={{ backgroundColor: '#334d80' }}>
+    <Disclosure as="nav" style={{ backgroundColor: '#1f2737' }}>
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -35,12 +38,8 @@ export default function Nav() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                <a href="/playersearch">
-                  <img
-                    className="h-8 w-auto"
-                    src="./sportmeme-logo-black-2.jpg"
-                    alt="Company"
-                  />
+                <a href="/">
+                 <Text as='b' color='white'>Deposta Portal</Text>
                    </a>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
@@ -53,6 +52,7 @@ export default function Nav() {
                           'rounded-md px-3 py-2 text-sm font-medium'
                         )}
                         aria-current={item.current ? 'page' : undefined}
+                        style={item.current ? { backgroundColor: '#4c525f', color: '#fff' } : {}}
                       >
                         {item.name}
                       </a>
@@ -64,7 +64,7 @@ export default function Nav() {
              {/* Display when user is logged in */}
              {isAuthenticated && (
               <>
-             <li> Welcome { user?.email} </li>
+             <Text as='b' color='white'> Welcome { user?.email} </Text>
                 <button
                   type="button"
                   className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"

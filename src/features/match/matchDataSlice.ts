@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IMatchData } from "../../types/match.type";
+import { stat } from "fs";
 
 const getLocalAllPlayer = () => {
   try {
@@ -20,17 +21,21 @@ const getLocalAllPlayer = () => {
 export const initialState: {
   allMatches: IMatchData[],
   filteredMatch: IMatchData[],
-  month: string,
+  month: string[],
+  selectedMonth: string,
   season: string,
-  team: string,
+  team: string[],
+  selectedTeam: string,
+  
 } = {
   allMatches: [],
   filteredMatch: [],
-  month: '12',
+  month: [],
+  selectedMonth: '',
   season: '2023-24',
-  team: 'All',
+  team: [],
+  selectedTeam: '',
 };
-
 
 export const matchDataSlice = createSlice({
   name: "matchData",
@@ -39,25 +44,35 @@ export const matchDataSlice = createSlice({
     setAllMatches: (state, action) => {
       state.allMatches = action.payload
     },
-    filteredDepostaMatch: (state, action) => {
-      
-      if (action.payload){
-        state.filteredMatch = action.payload
-        return 
-      }else{
-        var tempAllPlayers = getLocalAllPlayer()  
-          var teamPlayers = tempAllPlayers.filter((player: any) => {
-            if (state.team !== 'all' || state.team === null) {
-              if (player.team_name !== state.team) {
-                return false
-              }
-            }
-            return true
-          });
-          console.log('Team player:', teamPlayers)
-          state.filteredMatch = teamPlayers;
-      }
+    defaultDepostaMatch: (state, action) => {
+      state.filteredMatch = action.payload;
     },
+    filteredDepostaMatch: (state) => {
+      // if (action.payload !== '') {
+      //   state.filteredMatch = action.payload;
+      //   return;
+      // } 
+      // else {
+        console.log(state.selectedTeam, state.selectedMonth)
+        var teamMatch = state.allMatches.filter((allMatch: any) => {
+          if (state.selectedTeam !== '') {
+            if (allMatch.left_team !== state.selectedTeam || allMatch.right_team !== state.selectedTeam) {
+              return false;
+            }
+          }
+          if ((state.selectedMonth !== '')) {
+            if (extractYearMonth(allMatch.ymd) !== state.selectedMonth) {
+              return false;
+            }
+          }
+    
+          return true;
+        });
+        console.log('Team player:', teamMatch);
+        state.filteredMatch = teamMatch;
+      // }
+    },
+    
     setFilteredMatch: (state, action) => {
       state.filteredMatch = action.payload;
     },  
@@ -65,20 +80,39 @@ export const matchDataSlice = createSlice({
       state.season = action.payload;
     },    
     setMonth: (state, action) => {
-      state.month = action.payload;
+      state.month = Array.isArray(action.payload) ? action.payload : [action.payload];
+    },
+    setSelectedMonth: (state, action) => {
+      state.selectedMonth = action.payload;
     },
     setTeam: (state, action) => {
       state.team = action.payload;
     },
+    setSelectedTeam: (state, action) => {
+      state.selectedTeam = action.payload;
+    },
+    
   },
 });
+
+function extractYearMonth(dateString: string){
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); 
+
+  return `${year}-${month}`;
+};
 
 export const {
 setSeason, 
 setMonth, 
+setSelectedMonth,
 setTeam,
+setSelectedTeam,
 setAllMatches, 
 setFilteredMatch,
-filteredDepostaMatch } = matchDataSlice.actions;
+filteredDepostaMatch,
+defaultDepostaMatch
+ } = matchDataSlice.actions;
 
 export default matchDataSlice.reducer;

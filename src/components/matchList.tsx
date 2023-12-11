@@ -10,7 +10,7 @@ const MatchList = () => {
     const dispatch = useAppDispatch();
     const filteredMatch = useAppSelector((state: RootState) => state.matchData.filteredMatch);
     const season = useAppSelector((state: RootState) => state.matchData.season);
-   const {  callApi } = useApi();
+   const { callApi } = useApi();
 
     useEffect(() => {
         async function fetchData(season: string) {
@@ -19,7 +19,7 @@ const MatchList = () => {
           };
           console.log(season)
           try {
-            const response = await callApi('http://127.0.0.1:8002/match_list', params);
+            const response = await callApi('/match_list', params);
             console.log(response['match_data'].length);
             dispatch(setAllMatches(response['match_data']));
           } catch (error) {

@@ -1,6 +1,4 @@
-import React from 'react';
-import './App.css';
-import HeaderComponent from './components/header';
+import FilterComponent from './components/filters';
 import Nav from './components/nav';
 
 function App() {
@@ -9,7 +7,7 @@ function App() {
       <header className="App-header">
       <Nav />
       </header>
-      <HeaderComponent />
+      <FilterComponent />
     </div>
   );
 }

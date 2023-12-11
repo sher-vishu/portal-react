@@ -4,13 +4,19 @@ import { useAuth0 } from '@auth0/auth0-react';
 
 const useApi = () => {
   const { getAccessTokenSilently } = useAuth0();
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<any | null>(null);
 
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        const fetchedToken = await getAccessTokenSilently();
-        console.error('access token:', fetchedToken);
+        const fetchedToken = await getAccessTokenSilently(
+          // {
+          // authorizationParams: {
+          //   audience: 'http://54.65.66.139:8002/',
+          // },
+        // }
+        );
+        console.error('fetched token:', fetchedToken);
         setToken(fetchedToken);
       } catch (error) {
         console.error('Error fetching access token:', error);
@@ -29,7 +35,9 @@ const useApi = () => {
           return null;
         }
         console.log(endpoint, 'calling api')
-        const response = await axios.post('http://127.0.0.1:8002'+endpoint, data, {
+        const baseURL = 'http://127.0.0.1:9502'; 
+        const url = baseURL + endpoint;
+        const response = await axios.post(url, data, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
@@ -42,7 +50,7 @@ const useApi = () => {
         throw error;
       }
     },
-    []
+    [token]
   );
 
   return {
