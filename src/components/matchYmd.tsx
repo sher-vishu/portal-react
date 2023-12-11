@@ -18,7 +18,7 @@ const MatchByYmd = () => {
     });
   
     return (
-        <div className='grid md:grid-cols-1 grid-cols-2 gap-4'>
+        <div className='grid md:grid-cols-1 grid-cols-2 gap-4 pt-5'>
       <div>
       <SimpleGrid columns={4} spacing={10}>
         {Object.entries(matchesByYmd).map(([ymd, matches]) => (

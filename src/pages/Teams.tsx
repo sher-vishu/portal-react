@@ -5,12 +5,9 @@ import { Card,
   Button, 
   Text, 
   HStack, 
-  Divider, 
   Wrap, 
   WrapItem} from '@chakra-ui/react'
 import { setSeason, 
-  setMonth, 
-  setSelectedMonth, 
   setTeam, 
   setSelectedTeam, 
   setAllMatches, 
@@ -19,20 +16,15 @@ import { setSeason,
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 import { RootState } from '../app/store';
 import useApi from "../services/api.services";
-import button from './button'
-import MatchByYmd from './matchYmd';
 
-const FilterComponent = () => {
+const TeamPage = () => {
 
   const dispatch = useAppDispatch();
   const season = useAppSelector((state: RootState) => state.matchData.season);
-  const month = useAppSelector((state: RootState) => state.matchData.month);
   const team = useAppSelector((state: RootState) => state.matchData.team);
   const filteredMatch = useAppSelector((state: RootState) => state.matchData.filteredMatch);
-  const selectedMonth = useAppSelector((state: RootState) => state.matchData.month);
   let [depostaMatches, setDepostaMatches] = useState([])
   const [activeSeason, setActiveSeason] = useState('');
-  const [activeMonth, setActiveMonth] = useState(''); 
   const [activeTeam, setActiveTeam] = useState('');
 
   const { token, callApi } = useApi();
@@ -46,8 +38,6 @@ const FilterComponent = () => {
           const response = await callApi('/match_list', params)
             console.log(response['match_data'].length);
             dispatch(setAllMatches(response['match_data']));
-            dispatch(setMonth(response['month_list']));
-            dispatch(setSelectedMonth(month[0]))
             dispatch(setTeam(response['team_list']));
             dispatch(defaultDepostaMatch(response['match_data']));
           } catch (error) {
@@ -64,12 +54,6 @@ const FilterComponent = () => {
     setActiveSeason(selectedSeason);
     };
 
-  const handleMonthClick = (selectedMonth: string) => {
-    dispatch(setSelectedMonth(selectedMonth));
-    setActiveMonth(selectedMonth);
-    dispatch(filteredDepostaMatch());
-  };
-
   const handleTeamClick = (selectedTeam: string) => {
     dispatch(setSelectedTeam(selectedTeam));
     setActiveTeam(selectedTeam);
@@ -81,7 +65,7 @@ const FilterComponent = () => {
       <div className='p-5 pl-6 pr-6'>
         <Card bgColor='#f3f5f8' variant='outline'>
           <div className='p-5'>
-          <Heading as='h4' size='lg' paddingBottom='5'>B-League Match Schedule</Heading>
+          <Heading as='h4' size='lg' paddingBottom='5'>B-League Team List</Heading>
             {/* Season */}
             <HStack spacing='24px' paddingBottom='5'>
             <Text fontSize='md'>Season</Text>
@@ -97,24 +81,6 @@ const FilterComponent = () => {
             <Button color='#747c83' variant='outline' bgColor='white' onClick={() => handleSeasonClick('2020-21')}>2020-21</Button>
             <Button color='#747c83' variant='outline' bgColor='white' onClick={() => handleSeasonClick('2019-20')}>2019-20</Button>
             <Button color='#747c83' variant='outline' bgColor='white' onClick={() => handleSeasonClick('2018-19')}>2018-19</Button>
-            </Stack>
-            </HStack>
-            
-            {/* Month */}
-            
-            <HStack spacing='24px' paddingBottom='5'>
-            <Text>Month</Text>
-            <Stack direction='row' spacing={2} align='center'>
-            { month.map ((month: any) => (
-            <Button 
-            key={month}
-            bgColor={activeMonth === month ? '#334d80' : 'white'}
-            color={activeMonth === month ? 'white' : '#747c83'}
-            variant='outline'
-            onClick={() => handleMonthClick(month)}>
-              {month}
-            </Button>
-            ))}
             </Stack>
             </HStack>
             
@@ -138,13 +104,8 @@ const FilterComponent = () => {
             </div>
         </Card>
       </div>
-      <Divider borderWidth="1px" orientation="horizontal" color='#c1cfda'/>
-      <div className='p-4'>
-        {/* <MatchList /> */}
-        <MatchByYmd />
-        </div>
     </div>
   );
 };
 
-export default FilterComponent;
+export default TeamPage;

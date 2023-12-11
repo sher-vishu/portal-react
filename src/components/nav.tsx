@@ -6,9 +6,9 @@ import { Button, Stack, Text } from '@chakra-ui/react'
 
 const navigation = [
  { name: 'Calendar', href: '/', current: true },
- { name: 'Teams', href: '#', current: false },
- { name: 'Player Ranking', href: '#', current: false },
- { name: 'Team Ranking', href: '#', current: false },
+ { name: 'Teams', href: '/teams', current: false },
+ { name: 'Player Ranking', href: '/playerranking', current: false },
+ { name: 'Team Ranking', href: '/teamranking', current: false },
 ]
 
 function classNames(...classes: string[]) {
