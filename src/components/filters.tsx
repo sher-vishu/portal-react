@@ -16,11 +16,11 @@ import { setSeason,
   setAllMatches, 
   defaultDepostaMatch, 
   filteredDepostaMatch } from "../features/match/matchDataSlice";
-import MatchList from './matchList';
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 import { RootState } from '../app/store';
 import useApi from "../services/api.services";
 import button from './button'
+import MatchByYmd from './matchYmd';
 
 const FilterComponent = () => {
 
@@ -139,8 +139,9 @@ const FilterComponent = () => {
         </Card>
       </div>
       <Divider borderWidth="1px" orientation="horizontal" color='#c1cfda'/>
-      <div className='grid md:grid-cols-4 grid-cols-1 gap-4'>
-        <MatchList />
+      <div className='p-4'>
+        {/* <MatchList /> */}
+        <MatchByYmd />
         </div>
     </div>
   );
