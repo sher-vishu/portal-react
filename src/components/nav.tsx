@@ -5,7 +5,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Button, Stack, Text } from '@chakra-ui/react'
 
 const navigation = [
- { name: 'Calendar', href: '/matchlist', current: true },
+ { name: 'Calendar', href: '/', current: true },
  { name: 'Teams', href: '#', current: false },
  { name: 'Player Ranking', href: '#', current: false },
  { name: 'Team Ranking', href: '#', current: false },

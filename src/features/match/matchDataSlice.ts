@@ -21,18 +21,18 @@ const getLocalAllPlayer = () => {
 export const initialState: {
   allMatches: IMatchData[],
   filteredMatch: IMatchData[],
+  season: string,
   month: string[],
   selectedMonth: string,
-  season: string,
   team: string[],
   selectedTeam: string,
   
 } = {
   allMatches: [],
   filteredMatch: [],
+  season: '2023-24',
   month: [],
   selectedMonth: '',
-  season: '2023-24',
   team: [],
   selectedTeam: '',
 };

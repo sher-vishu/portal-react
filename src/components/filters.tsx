@@ -31,6 +31,9 @@ const FilterComponent = () => {
   const filteredMatch = useAppSelector((state: RootState) => state.matchData.filteredMatch);
   const selectedMonth = useAppSelector((state: RootState) => state.matchData.month);
   let [depostaMatches, setDepostaMatches] = useState([])
+  const [activeSeason, setActiveSeason] = useState('');
+  const [activeMonth, setActiveMonth] = useState(''); 
+  const [activeTeam, setActiveTeam] = useState('');
 
   const { token, callApi } = useApi();
 
@@ -58,22 +61,20 @@ const FilterComponent = () => {
 
   const handleSeasonClick = (selectedSeason: string) => {
     dispatch(setSeason(selectedSeason));
+    setActiveSeason(selectedSeason);
     };
 
   const handleMonthClick = (selectedMonth: string) => {
     dispatch(setSelectedMonth(selectedMonth));
+    setActiveMonth(selectedMonth);
     dispatch(filteredDepostaMatch());
   };
 
   const handleTeamClick = (selectedTeam: string) => {
     dispatch(setSelectedTeam(selectedTeam));
+    setActiveTeam(selectedTeam);
     dispatch(filteredDepostaMatch());
   };
-
-
-  // useEffect(() => {
-  //   dispatch(filteredDepostaMatch(''));
-  // }, [team, month]);
 
   return (
     <div>
@@ -85,7 +86,12 @@ const FilterComponent = () => {
             <HStack spacing='24px' paddingBottom='5'>
             <Text fontSize='md'>Season</Text>
             <Stack direction='row' spacing={2} align='center'>
-            <Button color='white' bgColor='#334d80' onClick={() => handleSeasonClick('2023-24')}>2023-24</Button>
+            <Button 
+            bgColor={activeSeason === season ? '#334d80' : 'white'}
+            color={activeSeason === season ? 'white' : '#747c83'}
+            onClick={() => handleSeasonClick('2023-24')}>
+              2023-24
+              </Button>
             <Button color='#747c83' variant='outline' bgColor='white' onClick={() => handleSeasonClick('2022-23')}>2022-23</Button>
             <Button color='#747c83' variant='outline' bgColor='white' onClick={() => handleSeasonClick('2021-22')}>2021-22</Button>
             <Button color='#747c83' variant='outline' bgColor='white' onClick={() => handleSeasonClick('2020-21')}>2020-21</Button>
@@ -100,7 +106,12 @@ const FilterComponent = () => {
             <Text>Month</Text>
             <Stack direction='row' spacing={2} align='center'>
             { month.map ((month: any) => (
-            <Button color='#747c83' variant='outline' bgColor='white' onClick={() => handleMonthClick(month)}>
+            <Button 
+            key={month}
+            bgColor={activeMonth === month ? '#334d80' : 'white'}
+            color={activeMonth === month ? 'white' : '#747c83'}
+            variant='outline'
+            onClick={() => handleMonthClick(month)}>
               {month}
             </Button>
             ))}
@@ -113,7 +124,11 @@ const FilterComponent = () => {
             <Wrap spacing='8px' flexWrap='wrap'>
             {team.map((team: any) => (
               <WrapItem key={team}>
-              <Button color='#747c83' variant='outline' bgColor='white' onClick={() => handleTeamClick(team)}>
+              <Button  
+              variant='outline' 
+              bgColor={activeTeam === team ? '#334d80' : 'white'}
+              color={activeTeam === team ? 'white' : '#747c83'}
+              onClick={() => handleTeamClick(team)}>
                 {team}
               </Button>
               </WrapItem>
