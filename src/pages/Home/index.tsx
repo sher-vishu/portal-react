@@ -1,13 +1,14 @@
-import FilterComponent from '../components/calendar';
-import Nav from '../components/nav';
-import MatchByYmd from '../components/matchYmd';
+import FilterComponent from '../../components/calendar';
+import Nav from '../../components/nav';
+import Layout from '../Layout/index'
+import MatchByYmd from '../../components/matchYmd';
 import { Divider} from '@chakra-ui/react'
 
-function Home() {
+const Home = () => {
   return (
     <div className="App">
       <header className="App-header">
-      <Nav />
+      <Layout />
       </header>
       <FilterComponent />
       <Divider borderWidth="1px" orientation="horizontal" color='#c1cfda'/>

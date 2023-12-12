@@ -1,22 +1,10 @@
-import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import TeamPage from "./pages/Teams";
-import PlayerRank from "./pages/PlayerRank";
-import TeamRank from "./pages/TeamRank";
-import NoPage from "./pages/NoPage";
+import React from "react";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routes";
 
-export default function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />}>
-          <Route path="/teams" element={<TeamPage />} />
-          <Route path="/playerranking" element={<PlayerRank />} />
-          <Route path="/teamranking" element={<TeamRank />} />
-          <Route path="*" element={<NoPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
+const App = () => {
+
+  return <RouterProvider router={router} />;
 }
+
+export default App

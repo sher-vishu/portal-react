@@ -12,18 +12,21 @@ import { setSeason,
   setSelectedTeam, 
   setAllMatches, 
   defaultDepostaMatch, 
-  filteredDepostaMatch } from "../features/match/matchDataSlice";
-import { useAppSelector, useAppDispatch } from '../app/hooks'
-import { RootState } from '../app/store';
-import useApi from "../services/api.services";
+  filteredDepostaMatch } from "../../features/match/matchDataSlice";
+import { useAppSelector, useAppDispatch } from '../../app/hooks'
+import { RootState } from '../../app/store';
+import useApi from "../../services/api.services";
+import Layout from '../Layout';
 
-const TeamPage = () => {
+const Teams = () => {
 
   const dispatch = useAppDispatch();
   const season = useAppSelector((state: RootState) => state.matchData.season);
   const team = useAppSelector((state: RootState) => state.matchData.team);
   const filteredMatch = useAppSelector((state: RootState) => state.matchData.filteredMatch);
+  const selectedMonth = useAppSelector((state: RootState) => state.matchData.month);
   let [depostaMatches, setDepostaMatches] = useState([])
+  const [allMatchData, setAllMatchData] = useState([]);
   const [activeSeason, setActiveSeason] = useState('');
   const [activeTeam, setActiveTeam] = useState('');
 
@@ -40,13 +43,12 @@ const TeamPage = () => {
             dispatch(setAllMatches(response['match_data']));
             dispatch(setTeam(response['team_list']));
             dispatch(defaultDepostaMatch(response['match_data']));
+            setAllMatchData(response['match_data'])
           } catch (error) {
           console.error('Error fetching player data:', error);
         }
       } fetchData(season)
     }, [season, token]);
-
-    console.log(filteredMatch)
 
 
   const handleSeasonClick = (selectedSeason: string) => {
@@ -57,11 +59,12 @@ const TeamPage = () => {
   const handleTeamClick = (selectedTeam: string) => {
     dispatch(setSelectedTeam(selectedTeam));
     setActiveTeam(selectedTeam);
-    // dispatch(filteredDepostaMatch());
+    dispatch(filteredDepostaMatch());
   };
 
   return (
     <div>
+      <Layout />
       <div className='p-5 pl-6 pr-6'>
         <Card bgColor='#f3f5f8' variant='outline'>
           <div className='p-5'>
@@ -108,4 +111,4 @@ const TeamPage = () => {
   );
 };
 
-export default TeamPage;
+export default Teams;

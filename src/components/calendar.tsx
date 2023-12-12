@@ -18,8 +18,6 @@ import { setSeason,
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 import { RootState } from '../app/store';
 import useApi from "../services/api.services";
-import button from './button'
-import { all } from 'axios';
 
 
 const FilterComponent = () => {

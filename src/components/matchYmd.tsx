@@ -2,6 +2,7 @@ import { Card, HStack, IconButton, Text, SimpleGrid } from '@chakra-ui/react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import { useAppSelector, useAppDispatch } from '../app/hooks'
 import { RootState } from '../app/store';
+import { Link } from 'react-router-dom';
 
 const MatchByYmd = () => {
     const dispatch = useAppDispatch();
@@ -29,11 +30,13 @@ const MatchByYmd = () => {
                 <Card key={match.schedule_key} variant='outline' padding='2'>
                   <HStack spacing='24px'>
                     <Text as="b" color='#747c83'>{match.card}</Text>
+                    <Link to='/gamesummary'>
                     <IconButton
                       aria-label='Search database'
                       size='lg'
                       icon={<ChevronRightIcon />}
                     />
+                    </Link>
                   </HStack>
                 </Card>
               ))}
