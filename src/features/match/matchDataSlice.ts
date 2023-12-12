@@ -48,29 +48,23 @@ export const matchDataSlice = createSlice({
       state.filteredMatch = action.payload;
     },
     filteredDepostaMatch: (state) => {
-      // if (action.payload !== '') {
-      //   state.filteredMatch = action.payload;
-      //   return;
-      // } 
-      // else {
         console.log(state.selectedTeam, state.selectedMonth)
-        var teamMatch = state.allMatches.filter((allMatch: any) => {
-          if (state.selectedTeam !== '') {
-            if (allMatch.left_team !== state.selectedTeam || allMatch.right_team !== state.selectedTeam) {
-              return false;
-            }
-          }
+        const teamMatch = state.allMatches.filter((match: any) => {
           if ((state.selectedMonth !== '')) {
-            if (extractYearMonth(allMatch.ymd) !== state.selectedMonth) {
+            if (extractYearMonth(match.ymd) !== state.selectedMonth) {
               return false;
             }
           }
-    
+
+          if (state.selectedTeam !== '') {
+            if (match.left_team !== state.selectedTeam && match.right_team !== state.selectedTeam) {
+              return false;
+            }
+          }
           return true;
         });
         console.log('Team player:', teamMatch);
         state.filteredMatch = teamMatch;
-      // }
     },
     
     setFilteredMatch: (state, action) => {

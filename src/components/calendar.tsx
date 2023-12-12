@@ -19,6 +19,7 @@ import { useAppSelector, useAppDispatch } from '../app/hooks'
 import { RootState } from '../app/store';
 import useApi from "../services/api.services";
 import button from './button'
+import { all } from 'axios';
 
 
 const FilterComponent = () => {
@@ -30,6 +31,7 @@ const FilterComponent = () => {
   const filteredMatch = useAppSelector((state: RootState) => state.matchData.filteredMatch);
   const selectedMonth = useAppSelector((state: RootState) => state.matchData.month);
   let [depostaMatches, setDepostaMatches] = useState([])
+  const [allMatchData, setAllMatchData] = useState([]);
   const [activeSeason, setActiveSeason] = useState('');
   const [activeMonth, setActiveMonth] = useState(''); 
   const [activeTeam, setActiveTeam] = useState('');
@@ -46,16 +48,15 @@ const FilterComponent = () => {
             console.log(response['match_data'].length);
             dispatch(setAllMatches(response['match_data']));
             dispatch(setMonth(response['month_list']));
-            dispatch(setSelectedMonth(month[0]))
+            dispatch(setSelectedMonth(response['month_list'][0]))
             dispatch(setTeam(response['team_list']));
             dispatch(defaultDepostaMatch(response['match_data']));
+            setAllMatchData(response['match_data'])
           } catch (error) {
           console.error('Error fetching player data:', error);
         }
       } fetchData(season)
     }, [season, token]);
-
-    console.log(filteredMatch)
 
 
   const handleSeasonClick = (selectedSeason: string) => {

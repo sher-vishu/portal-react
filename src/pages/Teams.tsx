@@ -57,7 +57,7 @@ const TeamPage = () => {
   const handleTeamClick = (selectedTeam: string) => {
     dispatch(setSelectedTeam(selectedTeam));
     setActiveTeam(selectedTeam);
-    dispatch(filteredDepostaMatch());
+    // dispatch(filteredDepostaMatch());
   };
 
   return (
