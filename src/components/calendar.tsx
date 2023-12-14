@@ -62,11 +62,18 @@ const FilterComponent = () => {
     setActiveSeason(selectedSeason);
     };
 
+  const handleAllMonth = () => {
+  }
+
   const handleMonthClick = (selectedMonth: string) => {
     dispatch(setSelectedMonth(selectedMonth));
     setActiveMonth(selectedMonth);
     dispatch(filteredDepostaMatch());
   };
+
+  const handleAllTeam = () => {
+    
+  }
 
   const handleTeamClick = (selectedTeam: string) => {
     dispatch(setSelectedTeam(selectedTeam));
@@ -103,6 +110,13 @@ const FilterComponent = () => {
             <HStack spacing='24px' paddingBottom='5'>
             <Text>Month</Text>
             <Stack direction='row' spacing={2} align='center'>
+            <Button 
+            variant='outline'
+            bgColor='white'
+            color='#747c83'
+            onClick={() => handleAllMonth()}>
+              All
+            </Button>
             { month.map ((month: any) => (
             <Button 
             key={month}
@@ -120,6 +134,13 @@ const FilterComponent = () => {
             <HStack spacing='24px' paddingBottom='5'>
             <Text>Team</Text>
             <Wrap spacing='8px' flexWrap='wrap'>
+            <Button 
+            variant='outline'
+            bgColor='white'
+            color='#747c83'
+            onClick={() => handleAllTeam()}>
+              All
+            </Button>
             {team.map((team: any) => (
               <WrapItem key={team}>
               <Button  

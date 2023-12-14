@@ -18,11 +18,11 @@ export const router = createBrowserRouter([
         errorElement: <Error />,
 
     },
-    // {
-    //     path: "/gamesummary",
-    //     element: <GameSummary />,
-    //     errorElement: <Error />,
-    // },
+    {
+        path: "/gamesummary",
+        element: <GameSummary />,
+        errorElement: <Error />,
+    },
     {
         path: "/playerranking",
         element: <PlayerRanking />,

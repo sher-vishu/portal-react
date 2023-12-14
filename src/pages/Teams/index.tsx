@@ -17,6 +17,7 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { RootState } from '../../app/store';
 import useApi from "../../services/api.services";
 import Layout from '../Layout';
+import { Link } from 'react-router-dom';
 
 const Teams = () => {
 
@@ -24,8 +25,6 @@ const Teams = () => {
   const season = useAppSelector((state: RootState) => state.matchData.season);
   const team = useAppSelector((state: RootState) => state.matchData.team);
   const filteredMatch = useAppSelector((state: RootState) => state.matchData.filteredMatch);
-  const selectedMonth = useAppSelector((state: RootState) => state.matchData.month);
-  let [depostaMatches, setDepostaMatches] = useState([])
   const [allMatchData, setAllMatchData] = useState([]);
   const [activeSeason, setActiveSeason] = useState('');
   const [activeTeam, setActiveTeam] = useState('');
@@ -68,7 +67,7 @@ const Teams = () => {
       <div className='p-5 pl-6 pr-6'>
         <Card bgColor='#f3f5f8' variant='outline'>
           <div className='p-5'>
-          <Heading as='h4' size='lg' paddingBottom='5'>B-League Team List</Heading>
+          <Heading as='h4' size='lg' paddingBottom='5'>B-League Match Schedule</Heading>
             {/* Season */}
             <HStack spacing='24px' paddingBottom='5'>
             <Text fontSize='md'>Season</Text>
@@ -93,6 +92,7 @@ const Teams = () => {
             <Wrap spacing='8px' flexWrap='wrap'>
             {team.map((team: any) => (
               <WrapItem key={team}>
+              <Link to='/teamsummary'>
               <Button  
               variant='outline' 
               bgColor={activeTeam === team ? '#334d80' : 'white'}
@@ -100,6 +100,7 @@ const Teams = () => {
               onClick={() => handleTeamClick(team)}>
                 {team}
               </Button>
+              </Link>
               </WrapItem>
             ))}
           </Wrap>

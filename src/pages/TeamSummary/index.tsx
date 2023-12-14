@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'
 import Layout from '../Layout/index'
 import {
-    Text,
     Tabs,
     TabList,
     TabPanels,
@@ -16,16 +15,14 @@ import {
     Td,
     TableContainer,
     Heading,
-    HStack,
     Spinner
 } from '@chakra-ui/react'
 import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store';
 import useApi from "../../services/api.services";
 
-
-const GameSummary = () => {
-
+const TeamSummary = () => {
+    
     const { token, callApi } = useApi();
     const [matchInfo, setMatchInfo] = useState<any>([]);
     const [homeTeamAdvanced, setHomeTeamAdvanced] = useState<any>([]);
@@ -71,7 +68,6 @@ const GameSummary = () => {
                     {matchInfo && (
                         <div className='mt-5 p-4'>
                             <Heading as='h3' size='lg' pb='2'>{matchInfo.match_name}</Heading>
-                            <Text color='#747c83' fontSize='md'>{matchInfo.match_date}</Text>
                         </div>
                     )}
                     <div>
@@ -85,48 +81,40 @@ const GameSummary = () => {
                             <TabPanels>
                                 <TabPanel padding='0'>
                                     <Card bgColor='#f3f5f8' padding='5'>
-                                    <HStack spacing='54px'>
-                                        {matchInfo && (
-                                            <div>
-                                                <Heading as='h5' size='sm' pb='3'>Game Summary</Heading>
-                                                <TableContainer>
-                                                    <Table size='sm' variant='simple' bgColor='white' p='4'>
-                                                        <Thead p='4'>
-                                                            <Tr>
-                                                                <Th p='4'>Team</Th>
-                                                                <Th isNumeric p='4'>PTS</Th>
-                                                            </Tr>
-                                                        </Thead>
-                                                        <Tbody>
-                                                            <Tr>
-                                                                <Td p='4'>{matchInfo.team1_name}</Td>
-                                                                <Td isNumeric p='4'>{matchInfo.team1_score}</Td>
-                                                            </Tr>
-                                                            <Tr>
-                                                                <Td p='4'>{matchInfo.team2_name}</Td>
-                                                                <Td isNumeric p='4'>{matchInfo.team2_score}</Td>
-                                                            </Tr>
-                                                        </Tbody>
-                                                    </Table>
-                                                </TableContainer>
-                                            </div>
-                                        )}
-
                                         <div>
-                                        <Heading as='h5' size='sm' pb='3'>Team Advanced</Heading>
+                                        <Heading as='h5' size='sm' pb='3'>Boxscore</Heading>
                                             <TableContainer>
                                                 <Table size='sm' variant='simple' bgColor='white' p='4'>
                                                     <Thead p='4'>
                                                         <Tr>
-                                                            <Th p='4'>H/A</Th>
-                                                            <Th p='4'>Team</Th>
-                                                            <Th isNumeric p='4'>Pace</Th>
-                                                            <Th isNumeric p='4'>Poss</Th>
-                                                            <Th isNumeric p='4'>sTOV</Th>
+                                                            <Th p='4'>Season</Th>
+                                                            <Th p='4'>Game</Th>
+                                                            <Th isNumeric p='4'>PTS</Th>
+                                                            <Th isNumeric p='4'>FGA</Th>
+                                                            <Th isNumeric p='4'>FGM</Th>
+                                                            <Th isNumeric p='4'>FG%</Th>
+                                                            <Th isNumeric p='4'>2FGM</Th>
+                                                            <Th isNumeric p='4'>2FGA</Th>
+                                                            <Th isNumeric p='4'>2FG%</Th>
+                                                            <Th isNumeric p='4'>Paint FGM</Th>
+                                                            <Th isNumeric p='4'>Paint FGA</Th>
+                                                            <Th isNumeric p='4'>Paint FG%</Th>
+                                                            <Th isNumeric p='4'>3FGM</Th>
+                                                            <Th isNumeric p='4'>3FGA</Th>
+                                                            <Th isNumeric p='4'>3FG%</Th>
+                                                            <Th isNumeric p='4'>FT</Th>
+                                                            <Th isNumeric p='4'>OR</Th>
+                                                            <Th isNumeric p='4'>DR</Th>
+                                                            <Th isNumeric p='4'>TR</Th>
+                                                            <Th isNumeric p='4'>AST</Th>
+                                                            <Th isNumeric p='4'>TO</Th>
+                                                            <Th isNumeric p='4'>STL</Th>
+                                                            <Th isNumeric p='4'>BLK</Th>
+                                                            <Th isNumeric p='4'>PF</Th>
                                                             <Th isNumeric p='4'>eFG%</Th>
-                                                            <Th isNumeric p='4'>TOV%</Th>
+                                                            <Th isNumeric p='4'>TO%</Th>
+                                                            <Th isNumeric p='4'>FTR</Th>
                                                             <Th isNumeric p='4'>ORB%</Th>
-                                                            <Th isNumeric p='4'>FT/FGA</Th>
                                                         </Tr>
                                                     </Thead>
                                                     <Tbody>
@@ -164,7 +152,6 @@ const GameSummary = () => {
                                                 </Table>
                                             </TableContainer>
                                         </div>
-                                      </HStack>
 
                                         <div className='pt-5 pb-5'>
                                         <Heading as='h5' size='sm' pb='3'>Team Comparison</Heading>
@@ -172,32 +159,34 @@ const GameSummary = () => {
                                                 <Table size='sm' variant='simple' bgColor='white' p='4'>
                                                     <Thead p='4'>
                                                         <Tr>
-                                                            <Th p='4'>H/A</Th>
-                                                            <Th p='4'>Team</Th>
+                                                        <Th p='4'>Season</Th>
+                                                            <Th p='4'>Game</Th>
+                                                            <Th isNumeric p='4'>PTS</Th>
                                                             <Th isNumeric p='4'>FGA</Th>
                                                             <Th isNumeric p='4'>FGM</Th>
                                                             <Th isNumeric p='4'>FG%</Th>
-                                                            <Th isNumeric p='4'>2PA</Th>
-                                                            <Th isNumeric p='4'>2PM</Th>
-                                                            <Th isNumeric p='4'>PaintFGM</Th>
-                                                            <Th isNumeric p='4'>PaintFGA</Th>
-                                                            <Th isNumeric p='4'>PaintFG%</Th>
-                                                            <Th isNumeric p='4'>3PA</Th>
-                                                            <Th isNumeric p='4'>3PM</Th>
-                                                            <Th isNumeric p='4'>3P%</Th>
-                                                            <Th isNumeric p='4'>FGA</Th>
-                                                            <Th isNumeric p='4'>FTA</Th>
-                                                            <Th isNumeric p='4'>FTM</Th>
-                                                            <Th isNumeric p='4'>FT%</Th>
-                                                            <Th isNumeric p='4'>ORB</Th>
-                                                            <Th isNumeric p='4'>TRB</Th>
+                                                            <Th isNumeric p='4'>2FGM</Th>
+                                                            <Th isNumeric p='4'>2FGA</Th>
+                                                            <Th isNumeric p='4'>2FG%</Th>
+                                                            <Th isNumeric p='4'>Paint FGM</Th>
+                                                            <Th isNumeric p='4'>Paint FGA</Th>
+                                                            <Th isNumeric p='4'>Paint FG%</Th>
+                                                            <Th isNumeric p='4'>3FGM</Th>
+                                                            <Th isNumeric p='4'>3FGA</Th>
+                                                            <Th isNumeric p='4'>3FG%</Th>
+                                                            <Th isNumeric p='4'>FT</Th>
+                                                            <Th isNumeric p='4'>OR</Th>
+                                                            <Th isNumeric p='4'>DR</Th>
+                                                            <Th isNumeric p='4'>TR</Th>
                                                             <Th isNumeric p='4'>AST</Th>
-                                                            <Th isNumeric p='4'>TOV</Th>
+                                                            <Th isNumeric p='4'>TO</Th>
                                                             <Th isNumeric p='4'>STL</Th>
                                                             <Th isNumeric p='4'>BLK</Th>
                                                             <Th isNumeric p='4'>PF</Th>
-                                                            <Th isNumeric p='4'>Pts of TO</Th>
-                                                            <Th isNumeric p='4'>FB Pts</Th>
+                                                            <Th isNumeric p='4'>eFG%</Th>
+                                                            <Th isNumeric p='4'>TO%</Th>
+                                                            <Th isNumeric p='4'>FTR</Th>
+                                                            <Th isNumeric p='4'>ORB%</Th>
                                                         </Tr>
                                                     </Thead>
                                                     <Tbody>
@@ -432,4 +421,4 @@ const GameSummary = () => {
     )
 }
 
-export default GameSummary
+export default TeamSummary
