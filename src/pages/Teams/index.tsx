@@ -92,7 +92,7 @@ const Teams = () => {
             <Wrap spacing='8px' flexWrap='wrap'>
             {team.map((team: any) => (
               <WrapItem key={team}>
-              <Link to='/teamsummary'>
+              <Link to='#'>
               <Button  
               variant='outline' 
               bgColor={activeTeam === team ? '#334d80' : 'white'}
