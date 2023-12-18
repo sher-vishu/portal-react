@@ -24,11 +24,9 @@ const FilterComponent = () => {
 
   const dispatch = useAppDispatch();
   const season = useAppSelector((state: RootState) => state.matchData.season);
-  const month = useAppSelector((state: RootState) => state.matchData.month);
   const team = useAppSelector((state: RootState) => state.matchData.team);
-  const filteredMatch = useAppSelector((state: RootState) => state.matchData.filteredMatch);
+  const month = useAppSelector((state: RootState) => state.matchData.month);
   const selectedMonth = useAppSelector((state: RootState) => state.matchData.month);
-  let [depostaMatches, setDepostaMatches] = useState([])
   const [allMatchData, setAllMatchData] = useState([]);
   const [activeSeason, setActiveSeason] = useState('');
   const [activeMonth, setActiveMonth] = useState(''); 
@@ -47,7 +45,7 @@ const FilterComponent = () => {
             dispatch(setAllMatches(response['match_data']));
             dispatch(setMonth(response['month_list']));
             dispatch(setSelectedMonth(response['month_list'][0]))
-            dispatch(setTeam(response['team_list']));
+            getTeamsData(season);
             dispatch(defaultDepostaMatch(response['match_data']));
             setAllMatchData(response['match_data'])
           } catch (error) {
@@ -75,11 +73,24 @@ const FilterComponent = () => {
     
   }
 
-  const handleTeamClick = (selectedTeam: string) => {
+  const handleTeamClick = (selectedTeam: any) => {
     dispatch(setSelectedTeam(selectedTeam));
     setActiveTeam(selectedTeam);
     dispatch(filteredDepostaMatch());
   };
+
+  async function getTeamsData(season:string){
+    const params = {
+      season: season,
+    };
+    try {
+      const response = await callApi('/team_list', params)
+        console.log(response['team_list'].length)
+        dispatch(setTeam(response['team_list']));
+      } catch (error) {
+      console.error('Error fetching player data:', error);
+    } 
+  }
 
   return (
     <div>
@@ -141,14 +152,14 @@ const FilterComponent = () => {
             onClick={() => handleAllTeam()}>
               All
             </Button>
-            {team.map((team: any) => (
-              <WrapItem key={team}>
+            {team.map((tm: any) => (
+              <WrapItem key={tm.team_name}>
               <Button  
               variant='outline' 
-              bgColor={activeTeam === team ? '#334d80' : 'white'}
-              color={activeTeam === team ? 'white' : '#747c83'}
-              onClick={() => handleTeamClick(team)}>
-                {team}
+              bgColor={activeTeam === tm ? '#334d80' : 'white'}
+              color={activeTeam === tm ? 'white' : '#747c83'}
+              onClick={() => handleTeamClick(tm)}>
+                {tm.team_name}
               </Button>
               </WrapItem>
             ))}

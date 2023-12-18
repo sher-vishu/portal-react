@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { IMatchData } from "../../types/match.type";
-import { stat } from "fs";
+import { ITeamData } from "../../types/team.type";
 
 const getLocalAllPlayer = () => {
   try {
@@ -24,11 +24,10 @@ export const initialState: {
   season: string,
   month: string[],
   selectedMonth: string,
-  team: string[],
-  selectedTeam: string,
+  team: ITeamData[],
+  selectedTeam: ITeamData,
   schedule_key: string,
-  team_id: string[],
-  
+  team_id: string,
 } = {
   allMatches: [],
   filteredMatch: [],
@@ -36,9 +35,9 @@ export const initialState: {
   month: [],
   selectedMonth: '',
   team: [],
-  selectedTeam: '',
+  selectedTeam: {} as ITeamData,
   schedule_key: '2024501494',
-  team_id: []
+  team_id: '9361'
 };
 
 export const matchDataSlice = createSlice({
@@ -60,8 +59,8 @@ export const matchDataSlice = createSlice({
             }
           }
 
-          if (state.selectedTeam !== '') {
-            if (match.left_team !== state.selectedTeam && match.right_team !== state.selectedTeam) {
+          if (state.selectedTeam.team_name !== '') {
+            if (match.left_team !== state.selectedTeam.team_name && match.right_team !== state.selectedTeam.team_name) {
               return false;
             }
           }
@@ -87,13 +86,11 @@ export const matchDataSlice = createSlice({
       state.team = action.payload;
     },
     setSelectedTeam: (state, action) => {
+      console.log(action.payload)
       state.selectedTeam = action.payload;
     },
     setScheduleKey: (state, action) => {
       state.schedule_key = action.payload;
-    },
-    setTeamId: (state, action) => {
-      state.team_id = action.payload;
     },
   },
 });
@@ -115,7 +112,6 @@ setSelectedTeam,
 setAllMatches, 
 setFilteredMatch,
 setScheduleKey,
-setTeamId,
 filteredDepostaMatch,
 defaultDepostaMatch
  } = matchDataSlice.actions;

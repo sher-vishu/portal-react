@@ -5,7 +5,7 @@ export interface IMatchData {
     right_team: string;
     card: string;
   }
-
+  
 export interface IGameData {
   schedule_key: string;
   season: string;

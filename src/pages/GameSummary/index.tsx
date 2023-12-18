@@ -116,7 +116,7 @@ const GameSummary = () => {
                                         <Heading as='h5' size='sm' pb='3'>Team Advanced</Heading>
                                             <TableContainer>
                                                 <Table size='sm' variant='simple' bgColor='white' p='4'>
-                                                    <Thead p='4'>
+                                                    <Thead p='4' bgColor='#b6bbc4'>
                                                         <Tr>
                                                             <Th p='4'>H/A</Th>
                                                             <Th p='4'>Team</Th>
@@ -170,7 +170,7 @@ const GameSummary = () => {
                                         <Heading as='h5' size='sm' pb='3'>Team Comparison</Heading>
                                             <TableContainer>
                                                 <Table size='sm' variant='simple' bgColor='white' p='4'>
-                                                    <Thead p='4'>
+                                                    <Thead p='4' bgColor='#b6bbc4'>
                                                         <Tr>
                                                             <Th p='4'>H/A</Th>
                                                             <Th p='4'>Team</Th>
@@ -279,7 +279,7 @@ const GameSummary = () => {
                <Heading as='h5' size='sm' pb='3'>{matchInfo.team1_name}</Heading>
                <TableContainer>
                <Table size='sm' variant='simple' bgColor='white'>
-               <Thead>
+               <Thead bgColor='#b6bbc4'>
                <Tr>
                <Th>#</Th>
                <Th>Name</Th>
@@ -347,7 +347,7 @@ const GameSummary = () => {
                 <Heading as='h5' size='sm' pb='3'>{matchInfo.team2_name} Boxscore</Heading>
                <TableContainer>
                <Table size='sm' variant='simple' bgColor='white'>
-               <Thead>
+               <Thead bgColor='#b6bbc4'>
                <Tr>
                <Th>#</Th>
                <Th>Name</Th>

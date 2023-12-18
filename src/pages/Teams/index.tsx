@@ -11,7 +11,7 @@ import { setSeason,
   setTeam, 
   setSelectedTeam, 
   setAllMatches, 
-  defaultDepostaMatch, 
+  defaultDepostaMatch,
   filteredDepostaMatch } from "../../features/match/matchDataSlice";
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { RootState } from '../../app/store';
@@ -24,11 +24,9 @@ const Teams = () => {
   const dispatch = useAppDispatch();
   const season = useAppSelector((state: RootState) => state.matchData.season);
   const team = useAppSelector((state: RootState) => state.matchData.team);
-  const filteredMatch = useAppSelector((state: RootState) => state.matchData.filteredMatch);
   const [allMatchData, setAllMatchData] = useState([]);
   const [activeSeason, setActiveSeason] = useState('');
   const [activeTeam, setActiveTeam] = useState('');
-
   const { token, callApi } = useApi();
 
   useEffect(() => {
@@ -38,9 +36,8 @@ const Teams = () => {
         };
         try {
           const response = await callApi('/match_list', params)
-            console.log(response['match_data'].length);
             dispatch(setAllMatches(response['match_data']));
-            dispatch(setTeam(response['team_list']));
+            getTeamsData(season)
             dispatch(defaultDepostaMatch(response['match_data']));
             setAllMatchData(response['match_data'])
           } catch (error) {
@@ -55,11 +52,24 @@ const Teams = () => {
     setActiveSeason(selectedSeason);
     };
 
-  const handleTeamClick = (selectedTeam: string) => {
+  const handleTeamClick = (selectedTeam: any) => {
     dispatch(setSelectedTeam(selectedTeam));
     setActiveTeam(selectedTeam);
     dispatch(filteredDepostaMatch());
   };
+
+  async function getTeamsData(season:string){
+    const params = {
+      season: season,
+    };
+    try {
+      const response = await callApi('/team_list', params)
+      console.log(response['team_list'].length)
+      dispatch(setTeam(response['team_list']));
+      } catch (error) {
+      console.error('Error fetching player data:', error);
+    } 
+  }
 
   return (
     <div>
@@ -90,15 +100,15 @@ const Teams = () => {
             <HStack spacing='24px' paddingBottom='5'>
             <Text>Team</Text>
             <Wrap spacing='8px' flexWrap='wrap'>
-            {team.map((team: any) => (
-              <WrapItem key={team}>
-              <Link to='#'>
+            {team.map((tm: any) => (
+              <WrapItem key={tm.id}>
+              <Link to='/teamsummary'>
               <Button  
               variant='outline' 
-              bgColor={activeTeam === team ? '#334d80' : 'white'}
-              color={activeTeam === team ? 'white' : '#747c83'}
-              onClick={() => handleTeamClick(team)}>
-                {team}
+              bgColor={activeTeam === tm ? '#334d80' : 'white'}
+              color={activeTeam === tm ? 'white' : '#747c83'}
+              onClick={() => handleTeamClick(tm)}>
+                {tm.team_name}
               </Button>
               </Link>
               </WrapItem>
