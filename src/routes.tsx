@@ -4,6 +4,7 @@ import Teams from "./pages/Teams/index";
 import GameSummary from "./pages/GameSummary/index";
 import TeamSummary from "./pages/TeamSummary";
 import PlayerRanking from "./pages/PlayerRanking/index";
+import PlayerSummary from "./pages/PlayerSummary";
 import TeamRanking from "./pages/TeamRanking/index";
 import Error from "./pages/NoPage/index";
 
@@ -31,6 +32,11 @@ export const router = createBrowserRouter([
     {
         path: "/playerranking",
         element: <PlayerRanking />,
+        errorElement: <Error />,
+    },
+    {
+        path: "/playersummary",
+        element: <PlayerSummary />,
         errorElement: <Error />,
     },
     {

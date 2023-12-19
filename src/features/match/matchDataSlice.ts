@@ -26,8 +26,10 @@ export const initialState: {
   selectedMonth: string,
   team: ITeamData[],
   selectedTeam: ITeamData,
+  position: string[],
   schedule_key: string,
   team_id: string,
+  player_id: string
 } = {
   allMatches: [],
   filteredMatch: [],
@@ -36,8 +38,10 @@ export const initialState: {
   selectedMonth: '',
   team: [],
   selectedTeam: {} as ITeamData,
+  position: [],
   schedule_key: '2024501494',
-  team_id: '9361'
+  team_id: '9361',
+  player_id: ''
 };
 
 export const matchDataSlice = createSlice({
@@ -86,8 +90,10 @@ export const matchDataSlice = createSlice({
       state.team = action.payload;
     },
     setSelectedTeam: (state, action) => {
-      console.log(action.payload)
       state.selectedTeam = action.payload;
+    },
+    setPosition: (state, action) => {
+      state.position = action.payload;
     },
     setScheduleKey: (state, action) => {
       state.schedule_key = action.payload;
@@ -109,6 +115,7 @@ setMonth,
 setSelectedMonth,
 setTeam,
 setSelectedTeam,
+setPosition,
 setAllMatches, 
 setFilteredMatch,
 setScheduleKey,

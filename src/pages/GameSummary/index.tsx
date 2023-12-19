@@ -16,8 +16,7 @@ import {
     Td,
     TableContainer,
     Heading,
-    HStack,
-    Spinner
+    HStack
 } from '@chakra-ui/react'
 import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store';
@@ -35,14 +34,12 @@ const GameSummary = () => {
     const [homePlayerBasic, setHomePlayerBasic] = useState([]);
     const [awayPlayerBasic, setAwayPlayerBasic] = useState([]);
     const schedule_key = useAppSelector((state: RootState) => state.matchData.schedule_key);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchData(schedule_key: string) {
             const params = {
                 schedule_key: schedule_key,
             };
-            await new Promise(resolve => setTimeout(resolve, 2000));
             try {
                 const response = await callApi('/game_summary', params)
                 setMatchInfo(response['match_info']);
@@ -54,9 +51,7 @@ const GameSummary = () => {
                 setAwayPlayerBasic(response['away_player_basic']);
             } catch (error) {
                 console.error('Error fetching player data:', error);
-            }finally {
-                setLoading(false);
-              }
+            }
         } fetchData(schedule_key)
     }, [schedule_key, token]);
 
@@ -64,10 +59,6 @@ const GameSummary = () => {
         <div>
             <Layout />
             <div className='p-4'>
-            {loading ? (
-       <Spinner />
-      ) : (
-                <>
                     {matchInfo && (
                         <div className='mt-5 p-4'>
                             <Heading as='h3' size='lg' pb='2'>{matchInfo.match_name}</Heading>
@@ -90,21 +81,21 @@ const GameSummary = () => {
                                             <div>
                                                 <Heading as='h5' size='sm' pb='3'>Game Summary</Heading>
                                                 <TableContainer>
-                                                    <Table size='sm' variant='simple' bgColor='white' p='4'>
-                                                        <Thead p='4'>
+                                                    <Table size='sm' variant='simple' bgColor='white'>
+                                                        <Thead bgColor='#b6bbc4'>
                                                             <Tr>
-                                                                <Th p='4'>Team</Th>
-                                                                <Th isNumeric p='4'>PTS</Th>
+                                                                <Th>Team</Th>
+                                                                <Th isNumeric>PTS</Th>
                                                             </Tr>
                                                         </Thead>
                                                         <Tbody>
                                                             <Tr>
-                                                                <Td p='4'>{matchInfo.team1_name}</Td>
-                                                                <Td isNumeric p='4'>{matchInfo.team1_score}</Td>
+                                                                <Td>{matchInfo.team1_name}</Td>
+                                                                <Td isNumeric>{matchInfo.team1_score}</Td>
                                                             </Tr>
                                                             <Tr>
-                                                                <Td p='4'>{matchInfo.team2_name}</Td>
-                                                                <Td isNumeric p='4'>{matchInfo.team2_score}</Td>
+                                                                <Td>{matchInfo.team2_name}</Td>
+                                                                <Td isNumeric>{matchInfo.team2_score}</Td>
                                                             </Tr>
                                                         </Tbody>
                                                     </Table>
@@ -115,48 +106,48 @@ const GameSummary = () => {
                                         <div>
                                         <Heading as='h5' size='sm' pb='3'>Team Advanced</Heading>
                                             <TableContainer>
-                                                <Table size='sm' variant='simple' bgColor='white' p='4'>
-                                                    <Thead p='4' bgColor='#b6bbc4'>
+                                                <Table size='sm' variant='simple' bgColor='white'>
+                                                    <Thead bgColor='#b6bbc4'>
                                                         <Tr>
-                                                            <Th p='4'>H/A</Th>
-                                                            <Th p='4'>Team</Th>
-                                                            <Th isNumeric p='4'>Pace</Th>
-                                                            <Th isNumeric p='4'>Poss</Th>
-                                                            <Th isNumeric p='4'>sTOV</Th>
-                                                            <Th isNumeric p='4'>eFG%</Th>
-                                                            <Th isNumeric p='4'>TOV%</Th>
-                                                            <Th isNumeric p='4'>ORB%</Th>
-                                                            <Th isNumeric p='4'>FT/FGA</Th>
+                                                            <Th>H/A</Th>
+                                                            <Th>Team</Th>
+                                                            <Th isNumeric>Pace</Th>
+                                                            <Th isNumeric>Poss</Th>
+                                                            <Th isNumeric>sTOV</Th>
+                                                            <Th isNumeric>eFG%</Th>
+                                                            <Th isNumeric>TOV%</Th>
+                                                            <Th isNumeric>ORB%</Th>
+                                                            <Th isNumeric>FT/FGA</Th>
                                                         </Tr>
                                                     </Thead>
                                                     <Tbody>
                                                         {homeTeamAdvanced &&
                                                             homeTeamAdvanced.map((hta: any) => ((
                                                                 <Tr>
-                                                                    <Td p='4'>{hta.home_or_away}</Td>
-                                                                    <Td p='4'>{hta.team_self}</Td>
-                                                                    <Td isNumeric p='4'>{hta.pace}</Td>
-                                                                    <Td isNumeric p='4'>{hta.poss}</Td>
-                                                                    <Td isNumeric p='4'>{hta.s_tov}</Td>
-                                                                    <Td isNumeric p='4'>{hta.efg}</Td>
-                                                                    <Td isNumeric p='4'>{hta.tov}</Td>
-                                                                    <Td isNumeric p='4'>{hta.orbp}</Td>
-                                                                    <Td isNumeric p='4'>{hta.ftr}</Td>
+                                                                    <Td>{hta.home_or_away}</Td>
+                                                                    <Td>{hta.team_self}</Td>
+                                                                    <Td isNumeric>{hta.pace}</Td>
+                                                                    <Td isNumeric>{hta.poss}</Td>
+                                                                    <Td isNumeric>{hta.s_tov}</Td>
+                                                                    <Td isNumeric>{hta.efg}</Td>
+                                                                    <Td isNumeric>{hta.tov}</Td>
+                                                                    <Td isNumeric>{hta.orbp}</Td>
+                                                                    <Td isNumeric>{hta.ftr}</Td>
                                                                 </Tr>
                                                             ))
                                                             )}
                                                         {awayTeamAdvanced &&
                                                             awayTeamAdvanced.map((ata: any) => ((
                                                                 <Tr>
-                                                                    <Td p='4'>{ata.home_or_away}</Td>
-                                                                    <Td p='4'>{ata.team_self}</Td>
-                                                                    <Td isNumeric p='4'>{ata.pace}</Td>
-                                                                    <Td isNumeric p='4'>{ata.poss}</Td>
-                                                                    <Td isNumeric p='4'>{ata.s_tov}</Td>
-                                                                    <Td isNumeric p='4'>{ata.efg}</Td>
-                                                                    <Td isNumeric p='4'>{ata.tov}</Td>
-                                                                    <Td isNumeric p='4'>{ata.orbp}</Td>
-                                                                    <Td isNumeric p='4'>{ata.ftr}</Td>
+                                                                    <Td>{ata.home_or_away}</Td>
+                                                                    <Td>{ata.team_self}</Td>
+                                                                    <Td isNumeric>{ata.pace}</Td>
+                                                                    <Td isNumeric>{ata.poss}</Td>
+                                                                    <Td isNumeric>{ata.s_tov}</Td>
+                                                                    <Td isNumeric>{ata.efg}</Td>
+                                                                    <Td isNumeric>{ata.tov}</Td>
+                                                                    <Td isNumeric>{ata.orbp}</Td>
+                                                                    <Td isNumeric>{ata.ftr}</Td>
                                                                 </Tr>
                                                             ))
                                                             )}
@@ -169,68 +160,68 @@ const GameSummary = () => {
                                         <div className='pt-5 pb-5'>
                                         <Heading as='h5' size='sm' pb='3'>Team Comparison</Heading>
                                             <TableContainer>
-                                                <Table size='sm' variant='simple' bgColor='white' p='4'>
-                                                    <Thead p='4' bgColor='#b6bbc4'>
+                                                <Table size='sm' variant='simple' bgColor='white'>
+                                                    <Thead bgColor='#b6bbc4'>
                                                         <Tr>
-                                                            <Th p='4'>H/A</Th>
-                                                            <Th p='4'>Team</Th>
-                                                            <Th isNumeric p='4'>FGA</Th>
-                                                            <Th isNumeric p='4'>FGM</Th>
-                                                            <Th isNumeric p='4'>FG%</Th>
-                                                            <Th isNumeric p='4'>2PA</Th>
-                                                            <Th isNumeric p='4'>2PM</Th>
-                                                            <Th isNumeric p='4'>PaintFGM</Th>
-                                                            <Th isNumeric p='4'>PaintFGA</Th>
-                                                            <Th isNumeric p='4'>PaintFG%</Th>
-                                                            <Th isNumeric p='4'>3PA</Th>
-                                                            <Th isNumeric p='4'>3PM</Th>
-                                                            <Th isNumeric p='4'>3P%</Th>
-                                                            <Th isNumeric p='4'>FGA</Th>
-                                                            <Th isNumeric p='4'>FTA</Th>
-                                                            <Th isNumeric p='4'>FTM</Th>
-                                                            <Th isNumeric p='4'>FT%</Th>
-                                                            <Th isNumeric p='4'>ORB</Th>
-                                                            <Th isNumeric p='4'>TRB</Th>
-                                                            <Th isNumeric p='4'>AST</Th>
-                                                            <Th isNumeric p='4'>TOV</Th>
-                                                            <Th isNumeric p='4'>STL</Th>
-                                                            <Th isNumeric p='4'>BLK</Th>
-                                                            <Th isNumeric p='4'>PF</Th>
-                                                            <Th isNumeric p='4'>Pts of TO</Th>
-                                                            <Th isNumeric p='4'>FB Pts</Th>
+                                                            <Th>H/A</Th>
+                                                            <Th>Team</Th>
+                                                            <Th isNumeric>FGA</Th>
+                                                            <Th isNumeric>FGM</Th>
+                                                            <Th isNumeric>FG%</Th>
+                                                            <Th isNumeric>2PA</Th>
+                                                            <Th isNumeric>2PM</Th>
+                                                            <Th isNumeric>PaintFGM</Th>
+                                                            <Th isNumeric>PaintFGA</Th>
+                                                            <Th isNumeric>PaintFG%</Th>
+                                                            <Th isNumeric>3PA</Th>
+                                                            <Th isNumeric>3PM</Th>
+                                                            <Th isNumeric>3P%</Th>
+                                                            <Th isNumeric>FGA</Th>
+                                                            <Th isNumeric>FTA</Th>
+                                                            <Th isNumeric>FTM</Th>
+                                                            <Th isNumeric>FT%</Th>
+                                                            <Th isNumeric>ORB</Th>
+                                                            <Th isNumeric>TRB</Th>
+                                                            <Th isNumeric>AST</Th>
+                                                            <Th isNumeric>TOV</Th>
+                                                            <Th isNumeric>STL</Th>
+                                                            <Th isNumeric>BLK</Th>
+                                                            <Th isNumeric>PF</Th>
+                                                            <Th isNumeric>Pts of TO</Th>
+                                                            <Th isNumeric>FB Pts</Th>
                                                         </Tr>
                                                     </Thead>
                                                     <Tbody>
                                                         {homeTeamBasic &&
                                                             homeTeamBasic.map((htb: any) => ((
                                                                 <Tr>
-                                                                    <Td p='4'>{htb.home_or_away}</Td>
-                                                                    <Td p='4'>{htb.team}</Td>
-                                                                    <Td isNumeric p='4'>{htb.fga}</Td>
-                                                                    <Td isNumeric p='4'>{htb.fgm}</Td>
-                                                                    <Td isNumeric p='4'>{htb.fgp}</Td>
-                                                                    {/* <Td isNumeric p='4'>{htb}</Td>
-                                                                    <Td isNumeric p='4'>{htb}</Td>
-                                                                    <Td isNumeric p='4'>{htb}</Td> */}
-                                                                    <Td isNumeric p='4'>{htb.paint_f2gm}</Td>
-                                                                    <Td isNumeric p='4'>{htb.paint_f2ga}</Td>
-                                                                    <Td isNumeric p='4'>{htb.paint_f2gp}</Td>
-                                                                    {/* <Td isNumeric p='4'>{homeTeamBasic}</Td>
-                                                                    <Td isNumeric p='4'>{homeTeamBasic}</Td>
-                                                                    <Td isNumeric p='4'>{homeTeamBasic}</Td> */}
-                                                                    <Td isNumeric p='4'>{htb.fga}</Td>
-                                                                    <Td isNumeric p='4'>{htb.fta}</Td>
-                                                                    <Td isNumeric p='4'>{htb.ftm}</Td>
-                                                                    <Td isNumeric p='4'>{htb.ftp}</Td>
-                                                                    <Td isNumeric p='4'>{htb.orb}</Td>
-                                                                    <Td isNumeric p='4'>{htb.treb}</Td>
-                                                                    <Td isNumeric p='4'>{htb.ast}</Td>
-                                                                    <Td isNumeric p='4'>{htb.tov}</Td>
-                                                                    <Td isNumeric p='4'>{htb.stl}</Td>
-                                                                    <Td isNumeric p='4'>{htb.blk}</Td>
-                                                                    {/* <Td isNumeric p='4'>{htb}</Td>
-                                                                    <Td isNumeric p='4'>{htb}</Td> */}
-                                                                    <Td isNumeric p='4'>{htb.fb}</Td>
+                                                                    <Td>{htb.home_or_away}</Td>
+                                                                    <Td>{htb.team}</Td>
+                                                                    <Td isNumeric>{htb.fga}</Td>
+                                                                    <Td isNumeric>{htb.fgm}</Td>
+                                                                    <Td isNumeric>{htb.fgp}</Td>
+                                                                    {/* <Td isNumeric>{htb}</Td>
+                                                                    <Td isNumeric>{htb}</Td>
+                                                                    <Td isNumeric>{htb}</Td> */}
+                                                                    <Td isNumeric>{htb.paint_f2gm}</Td>
+                                                                    <Td isNumeric>{htb.paint_f2ga}</Td>
+                                                                    <Td isNumeric>{htb.paint_f2gp}</Td>
+                                                                    {/* <Td isNumeric>{homeTeamBasic}</Td>
+                                                                    <Td isNumeric>{homeTeamBasic}</Td>
+                                                                    <Td isNumeric>{homeTeamBasic}</Td> */}
+                                                                    <Td isNumeric>{htb.fga}</Td>
+                                                                    <Td isNumeric>{htb.fta}</Td>
+                                                                    <Td isNumeric>{htb.ftm}</Td>
+                                                                    <Td isNumeric>{htb.ftp}</Td>
+                                                                    <Td isNumeric>{htb.orb}</Td>
+                                                                    <Td isNumeric>{htb.treb}</Td>
+                                                                    <Td isNumeric>{htb.ast}</Td>
+                                                                    <Td isNumeric>{htb.tov}</Td>
+                                                                    <Td isNumeric>{htb.stl}</Td>
+                                                                    <Td isNumeric>{htb.blk}</Td>
+                                                                    {/* <Td isNumeric>{htb}</Td>
+                                                                    <Td isNumeric>{htb}</Td> */}
+                                                                    <Td isNumeric>{htb.fb}</Td>
                                                                 </Tr>
                                                             ))
                                                             )}
@@ -239,33 +230,33 @@ const GameSummary = () => {
                                                         {awayTeamBasic && awayTeamBasic.map((atb: any) => ((
 
                                                             <Tr>
-                                                                <Td p='4'>{atb.home_or_away}</Td>
-                                                                <Td p='4'>{atb.team}</Td>
-                                                                <Td isNumeric p='4'>{atb.fga}</Td>
-                                                                <Td isNumeric p='4'>{atb.fgm}</Td>
-                                                                <Td isNumeric p='4'>{atb.fgp}</Td>
-                                                                {/* <Td isNumeric p='4'>{atb}</Td>
-                                                                <Td isNumeric p='4'>{atb}</Td>
-                                                                <Td isNumeric p='4'>{atb}</Td> */}
-                                                                <Td isNumeric p='4'>{atb.paint_f2gm}</Td>
-                                                                <Td isNumeric p='4'>{atb.paint_f2ga}</Td>
-                                                                <Td isNumeric p='4'>{atb.paint_f2gp}</Td>
-                                                                {/* <Td isNumeric p='4'>{atb}</Td>
-                                                                <Td isNumeric p='4'>{atb}</Td>
-                                                                <Td isNumeric p='4'>{atb}</Td> */}
-                                                                <Td isNumeric p='4'>{atb.fga}</Td>
-                                                                <Td isNumeric p='4'>{atb.fta}</Td>
-                                                                <Td isNumeric p='4'>{atb.ftm}</Td>
-                                                                <Td isNumeric p='4'>{atb.ftp}</Td>
-                                                                <Td isNumeric p='4'>{atb.orb}</Td>
-                                                                <Td isNumeric p='4'>{atb.treb}</Td>
-                                                                <Td isNumeric p='4'>{atb.ast}</Td>
-                                                                <Td isNumeric p='4'>{atb.tov}</Td>
-                                                                <Td isNumeric p='4'>{atb.stl}</Td>
-                                                                <Td isNumeric p='4'>{atb.blk}</Td>
-                                                                {/* <Td isNumeric p='4'>{atb}</Td>
-                                                                <Td isNumeric p='4'>{atb}</Td> */}
-                                                                <Td isNumeric p='4'>{atb.fb}</Td>
+                                                                <Td>{atb.home_or_away}</Td>
+                                                                <Td>{atb.team}</Td>
+                                                                <Td isNumeric>{atb.fga}</Td>
+                                                                <Td isNumeric>{atb.fgm}</Td>
+                                                                <Td isNumeric>{atb.fgp}</Td>
+                                                                {/* <Td isNumeric>{atb}</Td>
+                                                                <Td isNumeric>{atb}</Td>
+                                                                <Td isNumeric>{atb}</Td> */}
+                                                                <Td isNumeric>{atb.paint_f2gm}</Td>
+                                                                <Td isNumeric>{atb.paint_f2ga}</Td>
+                                                                <Td isNumeric>{atb.paint_f2gp}</Td>
+                                                                {/* <Td isNumeric>{atb}</Td>
+                                                                <Td isNumeric>{atb}</Td>
+                                                                <Td isNumeric>{atb}</Td> */}
+                                                                <Td isNumeric>{atb.fga}</Td>
+                                                                <Td isNumeric>{atb.fta}</Td>
+                                                                <Td isNumeric>{atb.ftm}</Td>
+                                                                <Td isNumeric>{atb.ftp}</Td>
+                                                                <Td isNumeric>{atb.orb}</Td>
+                                                                <Td isNumeric>{atb.treb}</Td>
+                                                                <Td isNumeric>{atb.ast}</Td>
+                                                                <Td isNumeric>{atb.tov}</Td>
+                                                                <Td isNumeric>{atb.stl}</Td>
+                                                                <Td isNumeric >{atb.blk}</Td>
+                                                                {/* <Td isNumeric>{atb}</Td>
+                                                                <Td isNumeric>{atb}</Td> */}
+                                                                <Td isNumeric>{atb.fb}</Td>
                                                             </Tr>
                                                         ))
                                                         )}
@@ -425,8 +416,6 @@ const GameSummary = () => {
                             </TabPanels>
                         </Tabs>
                     </div>
-                </>
-      )}
             </div>
         </div>
     )

@@ -77,7 +77,7 @@ const Teams = () => {
       <div className='p-5 pl-6 pr-6'>
         <Card bgColor='#f3f5f8' variant='outline'>
           <div className='p-5'>
-          <Heading as='h4' size='lg' paddingBottom='5'>B-League Match Schedule</Heading>
+          <Heading as='h4' size='lg' paddingBottom='5'>B-League Teams</Heading>
             {/* Season */}
             <HStack spacing='24px' paddingBottom='5'>
             <Text fontSize='md'>Season</Text>

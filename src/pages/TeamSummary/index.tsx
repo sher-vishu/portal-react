@@ -14,8 +14,7 @@ import {
     Th,
     Td,
     TableContainer,
-    Heading,
-    Spinner,
+    Heading
 } from '@chakra-ui/react'
 import { useAppSelector } from '../../app/hooks'
 import { RootState } from '../../app/store';
@@ -26,13 +25,12 @@ const TeamSummary = () => {
 
     const { token, callApi } = useApi();
     const [ownBoxscore, setOwnBoxscore] = useState<any>([]);
+    const [ teamSeasonBasicName, setTeamSeasonBasicName ] = useState([]);
     const [oppBoxscore, setOppBoxscore] = useState<any>([]);
     const [playerAvgStats, setPlayerAvgStats] = useState<any>([]);
     const [matchList, setMatchList] = useState<any>([]);
     const team_id = useAppSelector((state: RootState) => state.matchData.selectedTeam.team_id);
     const season = useAppSelector((state: RootState) => state.matchData.season);
-    const [loading, setLoading] = useState(false);
-
 
     useEffect(() => {
         async function fetchOwnBoxscore() {
@@ -42,6 +40,7 @@ const TeamSummary = () => {
             try {
                 const response = await callApi('/team_season_basic', params);
                 setOwnBoxscore(response['team_season_basic']);
+                setTeamSeasonBasicName(response['team_name']);
             } catch (error) {
                 console.log('api error')
             }
@@ -102,9 +101,9 @@ const TeamSummary = () => {
         <div>
             <Layout />
             <div className='p-4'>
-                        {ownBoxscore && (
+                        {teamSeasonBasicName && (
                             <div className='mt-5 p-4'>
-                                <Heading as='h3' size='lg' pb='2'>{ownBoxscore.team_name}</Heading>
+                                <Heading as='h3' size='lg' pb='2'>{teamSeasonBasicName}</Heading>
                             </div>
                         )}
                         <div>
