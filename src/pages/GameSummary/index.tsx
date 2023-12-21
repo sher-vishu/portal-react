@@ -16,17 +16,23 @@ import {
     Td,
     TableContainer,
     Heading,
-    HStack
+    HStack,
+    Button
 } from '@chakra-ui/react'
-import { useAppSelector } from '../../app/hooks'
+import { setSelectedPlayer } from "../../features/match/matchDataSlice";
+import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { RootState } from '../../app/store';
 import useApi from "../../services/api.services";
+import { useNavigate } from 'react-router-dom';
+import { IPlayerRank } from "../../types/player.type";
 
 
 const GameSummary = () => {
 
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const { token, callApi } = useApi();
-    const [matchInfo, setMatchInfo] = useState<any>([]);
+    const [matchInfo, setMatchInfo] = useState<any>({});
     const [homeTeamAdvanced, setHomeTeamAdvanced] = useState<any>([]);
     const [awayTeamAdvanced, setAwayTeamAdvanced] = useState<any>([]);
     const [homeTeamBasic, setHomeTeamBasic] = useState([]);
@@ -55,16 +61,19 @@ const GameSummary = () => {
         } fetchData(schedule_key)
     }, [schedule_key, token]);
 
+    const handlePlayerLinkClick = (player: IPlayerRank) => {
+        dispatch(setSelectedPlayer(player.player_id))
+        navigate('/playersummary');
+      };
+
     return (
         <div>
             <Layout />
             <div className='p-4'>
-                    {matchInfo && (
                         <div className='mt-5 p-4'>
                             <Heading as='h3' size='lg' pb='2'>{matchInfo.match_name}</Heading>
                             <Text color='#747c83' fontSize='md'>{matchInfo.match_date}</Text>
                         </div>
-                    )}
                     <div>
                         <Tabs variant='enclosed' padding='5'>
                             <TabList>
@@ -77,7 +86,6 @@ const GameSummary = () => {
                                 <TabPanel padding='0'>
                                     <Card bgColor='#f3f5f8' padding='5'>
                                     <HStack spacing='54px'>
-                                        {matchInfo && (
                                             <div>
                                                 <Heading as='h5' size='sm' pb='3'>Game Summary</Heading>
                                                 <TableContainer>
@@ -85,7 +93,7 @@ const GameSummary = () => {
                                                         <Thead bgColor='#b6bbc4'>
                                                             <Tr>
                                                                 <Th>Team</Th>
-                                                                <Th isNumeric>PTS</Th>
+                                                                <Th>PTS</Th>
                                                             </Tr>
                                                         </Thead>
                                                         <Tbody>
@@ -96,12 +104,11 @@ const GameSummary = () => {
                                                             <Tr>
                                                                 <Td>{matchInfo.team2_name}</Td>
                                                                 <Td isNumeric>{matchInfo.team2_score}</Td>
-                                                            </Tr>
+                                                            </Tr> 
                                                         </Tbody>
                                                     </Table>
                                                 </TableContainer>
                                             </div>
-                                        )}
 
                                         <div>
                                         <Heading as='h5' size='sm' pb='3'>Team Advanced</Heading>
@@ -110,14 +117,14 @@ const GameSummary = () => {
                                                     <Thead bgColor='#b6bbc4'>
                                                         <Tr>
                                                             <Th>H/A</Th>
-                                                            <Th>Team</Th>
-                                                            <Th isNumeric>Pace</Th>
-                                                            <Th isNumeric>Poss</Th>
-                                                            <Th isNumeric>sTOV</Th>
-                                                            <Th isNumeric>eFG%</Th>
-                                                            <Th isNumeric>TOV%</Th>
-                                                            <Th isNumeric>ORB%</Th>
-                                                            <Th isNumeric>FT/FGA</Th>
+                                                            <Th>TEAM</Th>
+                                                            <Th>PACE</Th>
+                                                            <Th>POSS</Th>
+                                                            <Th>sTOV</Th>
+                                                            <Th>eFG%</Th>
+                                                            <Th>TOV%</Th>
+                                                            <Th>ORB%</Th>
+                                                            <Th>FTR</Th>
                                                         </Tr>
                                                     </Thead>
                                                     <Tbody>
@@ -130,7 +137,7 @@ const GameSummary = () => {
                                                                     <Td isNumeric>{hta.poss}</Td>
                                                                     <Td isNumeric>{hta.s_tov}</Td>
                                                                     <Td isNumeric>{hta.efg}</Td>
-                                                                    <Td isNumeric>{hta.tov}</Td>
+                                                                    <Td isNumeric>{hta.tovp}</Td>
                                                                     <Td isNumeric>{hta.orbp}</Td>
                                                                     <Td isNumeric>{hta.ftr}</Td>
                                                                 </Tr>
@@ -145,7 +152,7 @@ const GameSummary = () => {
                                                                     <Td isNumeric>{ata.poss}</Td>
                                                                     <Td isNumeric>{ata.s_tov}</Td>
                                                                     <Td isNumeric>{ata.efg}</Td>
-                                                                    <Td isNumeric>{ata.tov}</Td>
+                                                                    <Td isNumeric>{ata.tovp}</Td>
                                                                     <Td isNumeric>{ata.orbp}</Td>
                                                                     <Td isNumeric>{ata.ftr}</Td>
                                                                 </Tr>
@@ -164,31 +171,31 @@ const GameSummary = () => {
                                                     <Thead bgColor='#b6bbc4'>
                                                         <Tr>
                                                             <Th>H/A</Th>
-                                                            <Th>Team</Th>
-                                                            <Th isNumeric>FGA</Th>
-                                                            <Th isNumeric>FGM</Th>
-                                                            <Th isNumeric>FG%</Th>
-                                                            <Th isNumeric>2PA</Th>
-                                                            <Th isNumeric>2PM</Th>
-                                                            <Th isNumeric>PaintFGM</Th>
-                                                            <Th isNumeric>PaintFGA</Th>
-                                                            <Th isNumeric>PaintFG%</Th>
-                                                            <Th isNumeric>3PA</Th>
-                                                            <Th isNumeric>3PM</Th>
-                                                            <Th isNumeric>3P%</Th>
-                                                            <Th isNumeric>FGA</Th>
-                                                            <Th isNumeric>FTA</Th>
-                                                            <Th isNumeric>FTM</Th>
-                                                            <Th isNumeric>FT%</Th>
-                                                            <Th isNumeric>ORB</Th>
-                                                            <Th isNumeric>TRB</Th>
-                                                            <Th isNumeric>AST</Th>
-                                                            <Th isNumeric>TOV</Th>
-                                                            <Th isNumeric>STL</Th>
-                                                            <Th isNumeric>BLK</Th>
-                                                            <Th isNumeric>PF</Th>
-                                                            <Th isNumeric>Pts of TO</Th>
-                                                            <Th isNumeric>FB Pts</Th>
+                                                            <Th>TEAM</Th>
+                                                            <Th>FGM</Th>
+                                                            <Th>FGA</Th>
+                                                            <Th>FG%</Th>
+                                                            <Th>2PM</Th>
+                                                            <Th>2PA</Th>
+                                                            <Th>2P%</Th>
+                                                            <Th>Paint FGM</Th>
+                                                            <Th>Paint FGA</Th>
+                                                            <Th>Paint FG%</Th>
+                                                            <Th>3PM</Th>
+                                                            <Th>3PA</Th>
+                                                            <Th>3P%</Th>
+                                                            <Th>FTM</Th>
+                                                            <Th>FTA</Th>
+                                                            <Th>FT%</Th>
+                                                            <Th>ORB</Th>
+                                                            <Th>TRB</Th>
+                                                            <Th>AST</Th>
+                                                            <Th>TOV</Th>
+                                                            <Th>STL</Th>
+                                                            <Th>BLK</Th>
+                                                            <Th>PF</Th>
+                                                            <Th>FB</Th>
+                                                            <Th>POT</Th>
                                                         </Tr>
                                                     </Thead>
                                                     <Tbody>
@@ -197,21 +204,20 @@ const GameSummary = () => {
                                                                 <Tr>
                                                                     <Td>{htb.home_or_away}</Td>
                                                                     <Td>{htb.team}</Td>
-                                                                    <Td isNumeric>{htb.fga}</Td>
                                                                     <Td isNumeric>{htb.fgm}</Td>
+                                                                    <Td isNumeric>{htb.fga}</Td>
                                                                     <Td isNumeric>{htb.fgp}</Td>
-                                                                    {/* <Td isNumeric>{htb}</Td>
-                                                                    <Td isNumeric>{htb}</Td>
-                                                                    <Td isNumeric>{htb}</Td> */}
+                                                                    <Td isNumeric>{htb.f2gm}</Td>
+                                                                    <Td isNumeric>{htb.f2ga}</Td>
+                                                                    <Td isNumeric>{htb.f2gp}</Td>
                                                                     <Td isNumeric>{htb.paint_f2gm}</Td>
                                                                     <Td isNumeric>{htb.paint_f2ga}</Td>
                                                                     <Td isNumeric>{htb.paint_f2gp}</Td>
-                                                                    {/* <Td isNumeric>{homeTeamBasic}</Td>
-                                                                    <Td isNumeric>{homeTeamBasic}</Td>
-                                                                    <Td isNumeric>{homeTeamBasic}</Td> */}
-                                                                    <Td isNumeric>{htb.fga}</Td>
-                                                                    <Td isNumeric>{htb.fta}</Td>
+                                                                    <Td isNumeric>{htb.f3gm}</Td>
+                                                                    <Td isNumeric>{htb.f3ga}</Td>
+                                                                    <Td isNumeric>{htb.f3gp}</Td>
                                                                     <Td isNumeric>{htb.ftm}</Td>
+                                                                    <Td isNumeric>{htb.fta}</Td>
                                                                     <Td isNumeric>{htb.ftp}</Td>
                                                                     <Td isNumeric>{htb.orb}</Td>
                                                                     <Td isNumeric>{htb.treb}</Td>
@@ -219,9 +225,9 @@ const GameSummary = () => {
                                                                     <Td isNumeric>{htb.tov}</Td>
                                                                     <Td isNumeric>{htb.stl}</Td>
                                                                     <Td isNumeric>{htb.blk}</Td>
-                                                                    {/* <Td isNumeric>{htb}</Td>
-                                                                    <Td isNumeric>{htb}</Td> */}
+                                                                    <Td isNumeric>{htb.f}</Td>
                                                                     <Td isNumeric>{htb.fb}</Td>
+                                                                    <Td isNumeric>{htb.pot}</Td>
                                                                 </Tr>
                                                             ))
                                                             )}
@@ -232,21 +238,20 @@ const GameSummary = () => {
                                                             <Tr>
                                                                 <Td>{atb.home_or_away}</Td>
                                                                 <Td>{atb.team}</Td>
-                                                                <Td isNumeric>{atb.fga}</Td>
                                                                 <Td isNumeric>{atb.fgm}</Td>
+                                                                <Td isNumeric>{atb.fga}</Td>
                                                                 <Td isNumeric>{atb.fgp}</Td>
-                                                                {/* <Td isNumeric>{atb}</Td>
-                                                                <Td isNumeric>{atb}</Td>
-                                                                <Td isNumeric>{atb}</Td> */}
+                                                                <Td isNumeric>{atb.f2gm}</Td>
+                                                                <Td isNumeric>{atb.f2ga}</Td>
+                                                                <Td isNumeric>{atb.f2gp}</Td>
                                                                 <Td isNumeric>{atb.paint_f2gm}</Td>
                                                                 <Td isNumeric>{atb.paint_f2ga}</Td>
                                                                 <Td isNumeric>{atb.paint_f2gp}</Td>
-                                                                {/* <Td isNumeric>{atb}</Td>
-                                                                <Td isNumeric>{atb}</Td>
-                                                                <Td isNumeric>{atb}</Td> */}
-                                                                <Td isNumeric>{atb.fga}</Td>
-                                                                <Td isNumeric>{atb.fta}</Td>
+                                                                <Td isNumeric>{atb.f3gm}</Td>
+                                                                <Td isNumeric>{atb.f3ga}</Td>
+                                                                <Td isNumeric>{atb.f3gp}</Td>
                                                                 <Td isNumeric>{atb.ftm}</Td>
+                                                                <Td isNumeric>{atb.fta}</Td>
                                                                 <Td isNumeric>{atb.ftp}</Td>
                                                                 <Td isNumeric>{atb.orb}</Td>
                                                                 <Td isNumeric>{atb.treb}</Td>
@@ -254,9 +259,9 @@ const GameSummary = () => {
                                                                 <Td isNumeric>{atb.tov}</Td>
                                                                 <Td isNumeric>{atb.stl}</Td>
                                                                 <Td isNumeric >{atb.blk}</Td>
-                                                                {/* <Td isNumeric>{atb}</Td>
-                                                                <Td isNumeric>{atb}</Td> */}
+                                                                <Td isNumeric>{atb.f}</Td>
                                                                 <Td isNumeric>{atb.fb}</Td>
+                                                                <Td isNumeric>{atb.pot}</Td>
                                                             </Tr>
                                                         ))
                                                         )}
@@ -273,60 +278,78 @@ const GameSummary = () => {
                <Thead bgColor='#b6bbc4'>
                <Tr>
                <Th>#</Th>
-               <Th>Name</Th>
-               <Th isNumeric>Starter</Th>
-               <Th isNumeric>MIN</Th>
-               <Th isNumeric>PTS</Th>
-               <Th isNumeric>FGA</Th>
-               <Th isNumeric>FGM</Th>
-               <Th isNumeric>FG%</Th>
-               <Th isNumeric>2PA</Th>
-               <Th isNumeric>2PM</Th>
-               <Th isNumeric>2P%</Th>
-               <Th isNumeric>3PA</Th>
-               <Th isNumeric>3PM</Th>
-               <Th isNumeric>3P%</Th>
-               <Th isNumeric>FTA</Th>
-               <Th isNumeric>FTM</Th>
-               <Th isNumeric>FT%</Th>
-               <Th isNumeric>ORB</Th>
-               <Th isNumeric>DRB</Th>
-               <Th isNumeric>TRB</Th>
-               <Th isNumeric>AST</Th>
-               <Th isNumeric>TOV</Th>
-               <Th isNumeric>STL</Th>
-               <Th isNumeric>BLK</Th>
-               <Th isNumeric>PF</Th>
+               <Th>PLAYER NAME</Th>
+               <Th>STARTER</Th>
+               <Th>MIN</Th>
+               <Th>PTS</Th>
+               <Th>FGM</Th>
+               <Th>FGA</Th>
+               <Th>FG%</Th>
+               <Th>2PM</Th>
+               <Th>2PA</Th>
+               <Th>2P%</Th>
+               <Th>Paint FGM</Th>
+               <Th>Paint FGA</Th>
+               <Th>Paint FG%</Th>
+               <Th>3PM</Th>
+               <Th>3PA</Th>
+               <Th>3P%</Th>
+               <Th>FTM</Th>
+               <Th>FTA</Th>
+               <Th>FT%</Th>
+               <Th>ORB</Th>
+               <Th>DRB</Th>
+               <Th>TRB</Th>
+               <Th>AST</Th>
+               <Th>TOV</Th>
+               <Th>STL</Th>
+               <Th>BLK</Th>
+               <Th>PF</Th>
+               <Th>FB</Th>
+               <Th>POT</Th>
                </Tr>
                </Thead>
                <Tbody>
                {homePlayerBasic && 
-             homePlayerBasic.map((match:any, index: number)=>(
+             homePlayerBasic.map((player:any, index: number)=>(
                <Tr key={index}>
-                  <Td>{match.no}</Td>  
-                  <Td>{match.player}</Td>
-                  <Td isNumeric>{match.starter}</Td>
-                  <Td isNumeric>{match.min}</Td>
-                  <Td isNumeric>{match.pts}</Td>
-                  <Td isNumeric>{match.fga}</Td>
-                  <Td isNumeric>{match.fgm}</Td>
-                  <Td isNumeric>{match.fgp}</Td> 
-                  {/* <Td isNumeric>{match}</Td>
-                  <Td isNumeric>{match}</Td>
-                  <Td isNumeric>{match}</Td>
-                  <Td isNumeric>{match}</Td>
-                  <Td isNumeric>{match}</Td>
-                  <Td isNumeric>{match}</Td>  */}
-                  <Td isNumeric>{match.fta}</Td>
-                  <Td isNumeric>{match.ftm}</Td>
-                  <Td isNumeric>{match.ftp}</Td>
-                  <Td isNumeric>{match.orb}</Td>
-                  <Td isNumeric>{match.drb}</Td>
-                  <Td isNumeric>{match.ast}</Td>
-                  <Td isNumeric>{match.tov}</Td>
-                  <Td isNumeric>{match.stl}</Td>
-                  <Td isNumeric>{match.blk}</Td>
-                  <Td isNumeric>{match.pf}</Td>
+                  <Td>{player.no}</Td>  
+                  <Td>
+                  <Button 
+                    variant='link' 
+                    color='blue.500' 
+                    onClick={() => handlePlayerLinkClick(player)}>
+                    {player.player}
+                  </Button>
+                  </Td>
+                  <Td isNumeric>{player.starter}</Td>
+                  <Td isNumeric>{player.min}</Td>
+                  <Td isNumeric>{player.pts}</Td>
+                  <Td isNumeric>{player.fgm}</Td>
+                  <Td isNumeric>{player.fga}</Td>
+                  <Td isNumeric>{player.fgp}</Td> 
+                  <Td isNumeric>{player.f2gm}</Td>
+                  <Td isNumeric>{player.f2ga}</Td>
+                  <Td isNumeric>{player.f2gp}</Td>
+                  <Td isNumeric>{player.paint_f2gm}</Td>
+                  <Td isNumeric>{player.paint_f2ga}</Td>
+                  <Td isNumeric>{player.paint_f2gp}</Td> 
+                  <Td isNumeric>{player.f3gm}</Td>
+                  <Td isNumeric>{player.f3ga}</Td>
+                  <Td isNumeric>{player.f3gp}</Td>
+                  <Td isNumeric>{player.ftm}</Td>
+                  <Td isNumeric>{player.fta}</Td>
+                  <Td isNumeric>{player.ftp}</Td>
+                  <Td isNumeric>{player.orb}</Td>
+                  <Td isNumeric>{player.drb}</Td>
+                  <Td isNumeric>{player.trb}</Td>
+                  <Td isNumeric>{player.ast}</Td>
+                  <Td isNumeric>{player.tov}</Td>
+                  <Td isNumeric>{player.stl}</Td>
+                  <Td isNumeric>{player.blk}</Td>
+                  <Td isNumeric>{player.pf}</Td>
+                  <Td isNumeric>{player.fb}</Td>
+                  <Td isNumeric>{player.pot}</Td>
                </Tr>
                 ))}
                </Tbody>
@@ -341,35 +364,35 @@ const GameSummary = () => {
                <Thead bgColor='#b6bbc4'>
                <Tr>
                <Th>#</Th>
-               <Th>Name</Th>
-               <Th isNumeric>Starter</Th>
-               <Th isNumeric>MIN</Th>
-               <Th isNumeric>PTS</Th>
-               <Th isNumeric>FGA</Th>
-               <Th isNumeric>FGM</Th>
-               <Th isNumeric>FG%</Th>
-               <Th isNumeric>2PA</Th>
-               <Th isNumeric>2PM</Th>
-               <Th isNumeric>2P%</Th>
-               <Th isNumeric>PaintFGM</Th>
-               <Th isNumeric>PaintFGA</Th>
-               <Th isNumeric>PaintFG%</Th>
-               <Th isNumeric>3PA</Th>
-               <Th isNumeric>3PM</Th>
-               <Th isNumeric>3P%</Th>
-               <Th isNumeric>FTA</Th>
-               <Th isNumeric>FTM</Th>
-               <Th isNumeric>FT%</Th>
-               <Th isNumeric>ORB</Th>
-               <Th isNumeric>DRB</Th>
-               <Th isNumeric>TRB</Th>
-               <Th isNumeric>AST</Th>
-               <Th isNumeric>TOV</Th>
-               <Th isNumeric>STL</Th>
-               <Th isNumeric>BLK</Th>
-               <Th isNumeric>BPts of TO</Th>
-               <Th isNumeric>FB Pts</Th>
-               <Th isNumeric>PF</Th>
+               <Th>PLAYER NAME</Th>
+               <Th>STARTER</Th>
+               <Th>MIN</Th>
+               <Th>PTS</Th>
+               <Th>FGM</Th>
+               <Th>FGA</Th>
+               <Th>FG%</Th>
+               <Th>2PM</Th>
+               <Th>2PA</Th>
+               <Th>2P%</Th>
+               <Th>Paint FGM</Th>
+               <Th>Paint FGA</Th>
+               <Th>Paint FG%</Th>
+               <Th>3PM</Th>
+               <Th>3PA</Th>
+               <Th>3P%</Th>
+               <Th>FTM</Th>
+               <Th>FTA</Th>
+               <Th>FT%</Th>
+               <Th>ORB</Th>
+               <Th>DRB</Th>
+               <Th>TRB</Th>
+               <Th>AST</Th>
+               <Th>TOV</Th>
+               <Th>STL</Th>
+               <Th>BLK</Th>
+               <Th>PF</Th>
+               <Th>FB</Th>
+               <Th>POT</Th>
                </Tr>
                </Thead>
                <Tbody>
@@ -377,29 +400,42 @@ const GameSummary = () => {
               awayPlayerBasic.map((match: any, index: number) => (
                <Tr key={index}>
                   <Td>{match.no}</Td>  
-                  <Td>{match.player}</Td>
+                  <Td>
+                  <Button 
+                    variant='link' 
+                    color='blue.500' 
+                    onClick={() => handlePlayerLinkClick(match)}>
+                   {match.player}
+                  </Button>
+                  </Td>
                   <Td isNumeric>{match.starter}</Td>
                   <Td isNumeric>{match.min}</Td>
                   <Td isNumeric>{match.pts}</Td>
-                  <Td isNumeric>{match.fga}</Td>
                   <Td isNumeric>{match.fgm}</Td>
+                  <Td isNumeric>{match.fga}</Td>
                   <Td isNumeric>{match.fgp}</Td>
-                  {/* <Td isNumeric>{match}</Td>
-                  <Td isNumeric>{match}</Td>
-                  <Td isNumeric>{match}</Td>
-                  <Td isNumeric>{match}</Td>
-                  <Td isNumeric>{match}</Td>
-                  <Td isNumeric>{match}</Td> */}
-                  <Td isNumeric>{match.fta}</Td>
+                  <Td isNumeric>{match.f2gm}</Td>
+                  <Td isNumeric>{match.f2ga}</Td>
+                  <Td isNumeric>{match.f2gp}</Td>
+                  <Td isNumeric>{match.paint_f2gm}</Td>
+                  <Td isNumeric>{match.paint_f2ga}</Td>
+                  <Td isNumeric>{match.paint_f2gp}</Td>
+                  <Td isNumeric>{match.f3gm}</Td>
+                  <Td isNumeric>{match.f3ga}</Td>
+                  <Td isNumeric>{match.f3gp}</Td>
                   <Td isNumeric>{match.ftm}</Td>
+                  <Td isNumeric>{match.fta}</Td>
                   <Td isNumeric>{match.ftp}</Td>
                   <Td isNumeric>{match.orb}</Td>
                   <Td isNumeric>{match.drb}</Td>
+                  <Td isNumeric>{match.trb}</Td>
                   <Td isNumeric>{match.ast}</Td>
                   <Td isNumeric>{match.tov}</Td>
                   <Td isNumeric>{match.stl}</Td>
                   <Td isNumeric>{match.blk}</Td>
                   <Td isNumeric>{match.pf}</Td>
+                  <Td isNumeric>{match.fb}</Td>
+                  <Td isNumeric>{match.pot}</Td>
                </Tr>
                 ))}
                </Tbody>

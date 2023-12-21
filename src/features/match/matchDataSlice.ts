@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IMatchData } from "../../types/match.type";
 import { ITeamData } from "../../types/team.type";
+import { IPlayerRank } from "../../types/player.type";
 
 const getLocalAllPlayer = () => {
   try {
@@ -26,10 +27,12 @@ export const initialState: {
   selectedMonth: string,
   team: ITeamData[],
   selectedTeam: ITeamData,
-  position: string[],
+  position: string,
+  selectedPosition: string,
   schedule_key: string,
   team_id: string,
-  player_id: string
+  player_id: string,
+  selectedPlayer: string
 } = {
   allMatches: [],
   filteredMatch: [],
@@ -38,10 +41,12 @@ export const initialState: {
   selectedMonth: '',
   team: [],
   selectedTeam: {} as ITeamData,
-  position: [],
+  position: 'PG',
+  selectedPosition: '',
   schedule_key: '2024501494',
   team_id: '9361',
-  player_id: ''
+  player_id: '1406',
+  selectedPlayer: ''
 };
 
 export const matchDataSlice = createSlice({
@@ -68,6 +73,8 @@ export const matchDataSlice = createSlice({
               return false;
             }
           }
+
+          
           return true;
         });
         console.log('Team player:', teamMatch);
@@ -84,6 +91,7 @@ export const matchDataSlice = createSlice({
       state.month = Array.isArray(action.payload) ? action.payload : [action.payload];
     },
     setSelectedMonth: (state, action) => {
+      console.log(action)
       state.selectedMonth = action.payload;
     },
     setTeam: (state, action) => {
@@ -97,6 +105,9 @@ export const matchDataSlice = createSlice({
     },
     setScheduleKey: (state, action) => {
       state.schedule_key = action.payload;
+    },
+    setSelectedPlayer: (state, action) => {
+      state.selectedPlayer = action.payload;
     },
   },
 });
@@ -119,6 +130,7 @@ setPosition,
 setAllMatches, 
 setFilteredMatch,
 setScheduleKey,
+setSelectedPlayer,
 filteredDepostaMatch,
 defaultDepostaMatch
  } = matchDataSlice.actions;

@@ -105,6 +105,7 @@ const FilterComponent = () => {
             <Button 
             bgColor={activeSeason === season ? '#334d80' : 'white'}
             color={activeSeason === season ? 'white' : '#747c83'}
+            variant='outline'
             onClick={() => handleSeasonClick('2023-24')}>
               2023-24
               </Button>

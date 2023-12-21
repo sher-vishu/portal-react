@@ -14,18 +14,24 @@ import {
     Th,
     Td,
     TableContainer,
-    Heading
+    Heading,
+    Button
 } from '@chakra-ui/react'
-import { useAppSelector } from '../../app/hooks'
+import { setSelectedPlayer, setSelectedTeam, setScheduleKey } from "../../features/match/matchDataSlice";
+import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { RootState } from '../../app/store';
 import useApi from "../../services/api.services";
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { IPlayerRank } from "../../types/player.type";
+import { ITeamData } from '../../types/team.type';
 
 const TeamSummary = () => {
 
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const { token, callApi } = useApi();
     const [ownBoxscore, setOwnBoxscore] = useState<any>([]);
-    const [ teamSeasonBasicName, setTeamSeasonBasicName ] = useState([]);
+    const [teamSeasonBasicName, setTeamSeasonBasicName] = useState<string>('');
     const [oppBoxscore, setOppBoxscore] = useState<any>([]);
     const [playerAvgStats, setPlayerAvgStats] = useState<any>([]);
     const [matchList, setMatchList] = useState<any>([]);
@@ -96,16 +102,28 @@ const TeamSummary = () => {
         fetchTeamMatchList();
     }, [team_id, season, token]);
 
-    
+    const handlePlayerLinkClick = (player: IPlayerRank) => {
+        dispatch(setSelectedPlayer(player.player_id))
+        navigate('/playersummary');
+      };
+
+    const handleTeamLinkClick = (team: any) => {
+        dispatch(setSelectedTeam(team.id))
+        navigate('/teamsummary');
+      };
+
+    const handleBoxscoreClick = (team: any) => {
+        dispatch(setScheduleKey(team.schedule_key))
+        navigate('/gamesummary');
+      };
+
     return (
         <div>
             <Layout />
             <div className='p-4'>
-                        {teamSeasonBasicName && (
                             <div className='mt-5 p-4'>
                                 <Heading as='h3' size='lg' pb='2'>{teamSeasonBasicName}</Heading>
                             </div>
-                        )}
                         <div>
                             <Tabs variant='enclosed' padding='5'>
                                 <TabList>
@@ -123,58 +141,68 @@ const TeamSummary = () => {
                                                     <Table size='sm' variant='simple' bgColor='white'>
                                                         <Thead bgColor='#b6bbc4'>
                                                             <Tr>
-                                                                <Th>Season</Th>
-                                                                <Th>Game</Th>
-                                                                <Th isNumeric>PTS</Th>
-                                                                <Th isNumeric>FGA</Th>
-                                                                <Th isNumeric>FGM</Th>
-                                                                <Th isNumeric>FG%</Th>
-                                                                <Th isNumeric>2FGM</Th>
-                                                                <Th isNumeric>2FGA</Th>
-                                                                <Th isNumeric>2FG%</Th>
-                                                                <Th isNumeric>3FGM</Th>
-                                                                <Th isNumeric>3FGA</Th>
-                                                                <Th isNumeric>3FG%</Th>
-                                                                <Th isNumeric>FTM</Th>
-                                                                <Th isNumeric>FTA</Th>
-                                                                <Th isNumeric>FTP</Th>
-                                                                <Th isNumeric>ORB</Th>
-                                                                <Th isNumeric>DRB</Th>
-                                                                <Th isNumeric>TRB</Th>
-                                                                <Th isNumeric>AST</Th>
-                                                                <Th isNumeric>TOV</Th>
-                                                                <Th isNumeric>STL</Th>
-                                                                <Th isNumeric>BLK</Th>
-                                                                <Th isNumeric>PF</Th>
-                                                                <Th isNumeric>eFG%</Th>
-                                                                <Th isNumeric>TOV%</Th>
-                                                                <Th isNumeric>FTR</Th>
-                                                                <Th isNumeric>ORB%</Th>
-                                                                <Th isNumeric>PTS</Th>
-                                                                <Th isNumeric>FGA</Th>
-                                                                <Th isNumeric>FGM</Th>
-                                                                <Th isNumeric>FG%</Th>
-                                                                <Th isNumeric>2FGM</Th>
-                                                                <Th isNumeric>2FGA</Th>
-                                                                <Th isNumeric>2FG%</Th>
-                                                                <Th isNumeric>3FGM</Th>
-                                                                <Th isNumeric>3FGA</Th>
-                                                                <Th isNumeric>3FG%</Th>
-                                                                <Th isNumeric>FTM</Th>
-                                                                <Th isNumeric>FTA</Th>
-                                                                <Th isNumeric>FTP</Th>
-                                                                <Th isNumeric>ORB</Th>
-                                                                <Th isNumeric>DRB</Th>
-                                                                <Th isNumeric>TRB</Th>
-                                                                <Th isNumeric>AST</Th>
-                                                                <Th isNumeric>TOV</Th>
-                                                                <Th isNumeric>STL</Th>
-                                                                <Th isNumeric>BLK</Th>
-                                                                <Th isNumeric>PF</Th>
-                                                                <Th isNumeric>eFG%</Th>
-                                                                <Th isNumeric>TOV%</Th>
-                                                                <Th isNumeric>FTR</Th>
-                                                                <Th isNumeric>ORB%</Th>
+                                                                <Th>SEASON</Th>
+                                                                <Th>GAME</Th>
+                                                                <Th>PTS</Th>
+                                                                <Th>FGM</Th>
+                                                                <Th>FGA</Th>
+                                                                <Th>FG%</Th>
+                                                                <Th>2PM</Th>
+                                                                <Th>2PA</Th>
+                                                                <Th>2P%</Th>
+                                                                <Th>Paint FGM</Th>
+                                                                <Th>Paint FGA</Th>
+                                                                <Th>Paint FG%</Th>
+                                                                <Th>3PM</Th>
+                                                                <Th>3PA</Th>
+                                                                <Th>3P%</Th>
+                                                                <Th>FTM</Th>
+                                                                <Th>FTA</Th>
+                                                                <Th>FTP</Th>
+                                                                <Th>ORB</Th>
+                                                                <Th>DRB</Th>
+                                                                <Th>TRB</Th>
+                                                                <Th>AST</Th>
+                                                                <Th>TOV</Th>
+                                                                <Th>STL</Th>
+                                                                <Th>BLK</Th>
+                                                                <Th>PF</Th>
+                                                                <Th>FB</Th>
+                                                                <Th>POT</Th>
+                                                                <Th>eFG%</Th>
+                                                                <Th>TOV%</Th>
+                                                                <Th>FTR</Th>
+                                                                <Th>ORB%</Th>
+                                                                <Th>PTS</Th>
+                                                                <Th>FGM</Th>
+                                                                <Th>FGA</Th>
+                                                                <Th>FG%</Th>
+                                                                <Th>2PM</Th>
+                                                                <Th>2PA</Th>
+                                                                <Th>2P%</Th>
+                                                                <Th>Paint FGM</Th>
+                                                                <Th>Paint FGA</Th>
+                                                                <Th>Paint FG%</Th>
+                                                                <Th>3PM</Th>
+                                                                <Th>3PA</Th>
+                                                                <Th>3P%</Th>
+                                                                <Th>FTM</Th>
+                                                                <Th>FTA</Th>
+                                                                <Th>FTP</Th>
+                                                                <Th>ORB</Th>
+                                                                <Th>DRB</Th>
+                                                                <Th>TRB</Th>
+                                                                <Th>AST</Th>
+                                                                <Th>TOV</Th>
+                                                                <Th>STL</Th>
+                                                                <Th>BLK</Th>
+                                                                <Th>PF</Th>
+                                                                <Th>FB</Th>
+                                                                <Th>POT</Th>
+                                                                <Th>eFG%</Th>
+                                                                <Th>TOV%</Th>
+                                                                <Th>FTR</Th>
+                                                                <Th>ORB%</Th>
                                                             </Tr>
                                                         </Thead>
                                                         <Tbody>
@@ -184,12 +212,15 @@ const TeamSummary = () => {
                                                                         <Td>{ownscore.season}</Td>
                                                                         <Td>{ownscore.game}</Td>
                                                                         <Td isNumeric>{ownscore.pts}</Td>
-                                                                        <Td isNumeric>{ownscore.fga}</Td>
                                                                         <Td isNumeric>{ownscore.fgm}</Td>
+                                                                        <Td isNumeric>{ownscore.fga}</Td>
                                                                         <Td isNumeric>{ownscore.fgp}</Td>
                                                                         <Td isNumeric>{ownscore.f2gm}</Td>
                                                                         <Td isNumeric>{ownscore.f2ga}</Td>
                                                                         <Td isNumeric>{ownscore.f2gp}</Td>
+                                                                        <Td isNumeric>{ownscore.paint_f2gm}</Td>
+                                                                        <Td isNumeric>{ownscore.paint_f2ga}</Td>
+                                                                        <Td isNumeric>{ownscore.paint_f2gp}</Td>
                                                                         <Td isNumeric>{ownscore.f3gm}</Td>
                                                                         <Td isNumeric>{ownscore.f3ga}</Td>
                                                                         <Td isNumeric>{ownscore.f3gp}</Td>
@@ -204,6 +235,8 @@ const TeamSummary = () => {
                                                                         <Td isNumeric>{ownscore.stl}</Td>
                                                                         <Td isNumeric>{ownscore.blk}</Td>
                                                                         <Td isNumeric>{ownscore.pf}</Td>
+                                                                        <Td isNumeric>{ownscore.fb}</Td>
+                                                                        <Td isNumeric>{ownscore.pot}</Td>
                                                                         <Td isNumeric>{ownscore.efg}</Td>
                                                                         <Td isNumeric>{ownscore.tovp}</Td>
                                                                         <Td isNumeric>{ownscore.ftr}</Td>
@@ -212,12 +245,15 @@ const TeamSummary = () => {
                                                             {oppBoxscore[index] && (
                                                                 <>
                                                                         <Td isNumeric>{oppBoxscore[index].pts_opp}</Td>
-                                                                        <Td isNumeric>{oppBoxscore[index].fga_opp}</Td>
                                                                         <Td isNumeric>{oppBoxscore[index].fgm_opp}</Td>
+                                                                        <Td isNumeric>{oppBoxscore[index].fga_opp}</Td>
                                                                         <Td isNumeric>{oppBoxscore[index].fgp_opp}</Td>
                                                                         <Td isNumeric>{oppBoxscore[index].f2gm_opp}</Td>
                                                                         <Td isNumeric>{oppBoxscore[index].f2ga_opp}</Td>
                                                                         <Td isNumeric>{oppBoxscore[index].f2gp_opp}</Td>
+                                                                        <Td isNumeric>{oppBoxscore[index].paint_f2gm_opp}</Td>
+                                                                        <Td isNumeric>{oppBoxscore[index].paint_f2ga_opp}</Td>
+                                                                        <Td isNumeric>{oppBoxscore[index].paint_f2gp_opp}</Td>
                                                                         <Td isNumeric>{oppBoxscore[index].f3gm_opp}</Td>
                                                                         <Td isNumeric>{oppBoxscore[index].f3ga_opp}</Td>
                                                                         <Td isNumeric>{oppBoxscore[index].f3gp_opp}</Td>
@@ -232,6 +268,8 @@ const TeamSummary = () => {
                                                                         <Td isNumeric>{oppBoxscore[index].stl_opp}</Td>
                                                                         <Td isNumeric>{oppBoxscore[index].blk_opp}</Td>
                                                                         <Td isNumeric>{oppBoxscore[index].pf_opp}</Td>
+                                                                        <Td isNumeric>{oppBoxscore[index].fb_opp}</Td>
+                                                                        <Td isNumeric>{oppBoxscore[index].pot_opp}</Td>
                                                                         <Td isNumeric>{oppBoxscore[index].efg_opp}</Td>
                                                                         <Td isNumeric>{oppBoxscore[index].tovp_opp}</Td>
                                                                         <Td isNumeric>{oppBoxscore[index].ftr_opp}</Td>
@@ -253,39 +291,46 @@ const TeamSummary = () => {
                                                         <Thead bgColor='#b6bbc4'>
                                                             <Tr>
                                                                 <Th>#</Th>
-                                                                <Th>Name</Th>
-                                                                <Th isNumeric>Position</Th>
-                                                                <Th isNumeric>HT</Th>
-                                                                <Th isNumeric>WT</Th>
-                                                                <Th isNumeric>Birth Date</Th>
-                                                                <Th isNumeric>Country</Th>
-                                                                <Th isNumeric>Type</Th>
-                                                                <Th isNumeric>G</Th>
-                                                                <Th isNumeric>MIN</Th>
-                                                                <Th isNumeric>PTS</Th>
-                                                                <Th isNumeric>FGA</Th>
-                                                                <Th isNumeric>FGM</Th>
-                                                                <Th isNumeric>FG%</Th>
-                                                                <Th isNumeric>2PA</Th>
-                                                                <Th isNumeric>2PM</Th>
-                                                                <Th isNumeric>2P%</Th>
-                                                                <Th isNumeric>3PA</Th>
-                                                                <Th isNumeric>3PM</Th>
-                                                                <Th isNumeric>3P%</Th>
-                                                                <Th isNumeric>FTA</Th>
-                                                                <Th isNumeric>FTM</Th>
-                                                                <Th isNumeric>FT%</Th>
-                                                                <Th isNumeric>ORB</Th>
-                                                                <Th isNumeric>DRB</Th>
-                                                                <Th isNumeric>TRB</Th>
-                                                                <Th isNumeric>AST</Th>
-                                                                <Th isNumeric>TOV</Th>
-                                                                <Th isNumeric>STL</Th>
-                                                                <Th isNumeric>BLK</Th>
-                                                                <Th isNumeric>eFG%</Th>
-                                                                <Th isNumeric>TOV%</Th>
-                                                                <Th isNumeric>FTR</Th>
-                                                                <Th isNumeric>ORB%</Th>
+                                                                <Th>NAME</Th>
+                                                                <Th>POSITION</Th>
+                                                                <Th>HT</Th>
+                                                                <Th>WT</Th>
+                                                                <Th>BIRTH DATE</Th>
+                                                                <Th>COUNTRY</Th>
+                                                                <Th>TYPE</Th>
+                                                                <Th>G</Th>
+                                                                <Th>MIN</Th>
+                                                                <Th>PTS</Th>
+                                                                <Th>FGM</Th>
+                                                                <Th>FGA</Th>
+                                                                <Th>FG%</Th>
+                                                                <Th>2PM</Th>
+                                                                <Th>2PA</Th>
+                                                                <Th>2P%</Th>
+                                                                <Th>Paint FGM</Th>
+                                                                <Th>Paint FGA</Th>
+                                                                <Th>Paint FG%</Th>
+                                                                <Th>3PM</Th>
+                                                                <Th>3PA</Th>
+                                                                <Th>3P%</Th>
+                                                                <Th>FTM</Th>
+                                                                <Th>FTA</Th>
+                                                                <Th>FT%</Th>
+                                                                <Th>ORB</Th>
+                                                                <Th>DRB</Th>
+                                                                <Th>TRB</Th>
+                                                                <Th>AST</Th>
+                                                                <Th>TOV</Th>
+                                                                <Th>STL</Th>
+                                                                <Th>BLK</Th>
+                                                                <Th>PF</Th>
+                                                                <Th>FD</Th>
+                                                                <Th>FB</Th>
+                                                                <Th>POT</Th>
+                                                                <Th>eFG%</Th>
+                                                                <Th>TOV%</Th>
+                                                                <Th>FTR</Th>
+                                                                <Th>ORB%</Th>
                                                             </Tr>
                                                         </Thead>
                                                         <Tbody>
@@ -293,7 +338,14 @@ const TeamSummary = () => {
                                                                 playerAvgStats.map((player: any, index: number) => (
                                                                     <Tr key={index}>
                                                                         <Td>{player.number}</Td>
-                                                                        <Td>{player.player}</Td>
+                                                                        <Td>
+                                                                        <Button 
+                                                                        variant='link' 
+                                                                        color='blue.500' 
+                                                                        onClick={() => handlePlayerLinkClick(player)}>
+                                                                            {player.player}
+                                                                        </Button>
+                                                                        </Td>
                                                                         <Td isNumeric>{player.position}</Td>
                                                                         <Td isNumeric>{player.height}</Td>
                                                                         <Td isNumeric>{player.weight}</Td>
@@ -301,7 +353,7 @@ const TeamSummary = () => {
                                                                         <Td isNumeric>{player.country}</Td>
                                                                         <Td isNumeric>{player.nationality_type}</Td>
                                                                         <Td isNumeric>{player.g}</Td>
-                                                                        <Td isNumeric>{player.min}</Td>
+                                                                        <Td isNumeric>{player.mp}</Td>
                                                                         <Td isNumeric>{player.pts}</Td>
                                                                         <Td isNumeric>{player.fgm}</Td>
                                                                         <Td isNumeric>{player.fga}</Td>
@@ -309,6 +361,9 @@ const TeamSummary = () => {
                                                                         <Td isNumeric>{player.f2gm}</Td>
                                                                         <Td isNumeric>{player.f2ga}</Td>
                                                                         <Td isNumeric>{player.f2gp}</Td>
+                                                                        <Td isNumeric>{player.paint_f2gm}</Td>
+                                                                        <Td isNumeric>{player.paint_f2ga}</Td>
+                                                                        <Td isNumeric>{player.paint_f2gp}</Td>
                                                                         <Td isNumeric>{player.f3gm}</Td>
                                                                         <Td isNumeric>{player.f3ga}</Td>
                                                                         <Td isNumeric>{player.f3gp}</Td>
@@ -322,6 +377,10 @@ const TeamSummary = () => {
                                                                         <Td isNumeric>{player.tov}</Td>
                                                                         <Td isNumeric>{player.stl}</Td>
                                                                         <Td isNumeric>{player.blk}</Td>
+                                                                        <Td isNumeric>{player.pf}</Td>
+                                                                        <Td isNumeric>{player.fd}</Td>
+                                                                        <Td isNumeric>{player.fb}</Td>
+                                                                        <Td isNumeric>{player.pot}</Td>
                                                                         <Td isNumeric>{player.efg}</Td>
                                                                         <Td isNumeric>{player.tovp}</Td>
                                                                         <Td isNumeric>{player.ftr}</Td>
@@ -339,136 +398,168 @@ const TeamSummary = () => {
                                                     <Table size='sm' variant='simple' bgColor='white'>
                                                         <Thead bgColor='#b6bbc4'>
                                                             <Tr>
-                                                                <Th>Match Date</Th>
+                                                                <Th>MATCH DATE</Th>
                                                                 <Th>H/A</Th>
-                                                                <Th isNumeric>Opponent</Th>
-                                                                <Th isNumeric>Score</Th>
-                                                                <Th isNumeric>DIFF</Th>
-                                                                <Th isNumeric>W/L</Th>
-                                                                <Th isNumeric>Box Score</Th>
-                                                                <Th isNumeric>PACE</Th>
-                                                                <Th isNumeric>ORTG</Th>
-                                                                <Th isNumeric>DRTG</Th>
-                                                                <Th isNumeric>eFG%</Th>
-                                                                <Th isNumeric>TOV%</Th>
-                                                                <Th isNumeric>FTR</Th>
-                                                                <Th isNumeric>ORB%</Th>
-                                                                <Th isNumeric>FGM</Th>
-                                                                <Th isNumeric>FGA</Th>
-                                                                <Th isNumeric>FG%</Th>
-                                                                <Th isNumeric>2FGM</Th>
-                                                                <Th isNumeric>2FGA</Th>
-                                                                <Th isNumeric>2FG%</Th>
-                                                                <Th isNumeric>3FGM</Th>
-                                                                <Th isNumeric>3FGA</Th>
-                                                                <Th isNumeric>3FG%</Th>
-                                                                <Th isNumeric>FTA</Th>
-                                                                <Th isNumeric>FTM</Th>
-                                                                <Th isNumeric>FT%</Th>
-                                                                <Th isNumeric>ORB</Th>
-                                                                <Th isNumeric>DRB</Th>
-                                                                <Th isNumeric>TRB</Th>
-                                                                <Th isNumeric>AST</Th>
-                                                                <Th isNumeric>TOV</Th>
-                                                                <Th isNumeric>STL</Th>
-                                                                <Th isNumeric>BLK</Th>
-                                                                <Th isNumeric>F</Th>
-                                                                <Th isNumeric>PACE</Th>
-                                                                <Th isNumeric>ORTG</Th>
-                                                                <Th isNumeric>DRTG</Th>
-                                                                <Th isNumeric>eFG%</Th>
-                                                                <Th isNumeric>TOV%</Th>
-                                                                <Th isNumeric>FTR</Th>
-                                                                <Th isNumeric>ORB%</Th>
-                                                                <Th isNumeric>FGM</Th>
-                                                                <Th isNumeric>FGA</Th>
-                                                                <Th isNumeric>FG%</Th>
-                                                                <Th isNumeric>2FGM</Th>
-                                                                <Th isNumeric>2FGA</Th>
-                                                                <Th isNumeric>2FG%</Th>
-                                                                <Th isNumeric>3FGM</Th>
-                                                                <Th isNumeric>3FGA</Th>
-                                                                <Th isNumeric>3FG%</Th>
-                                                                <Th isNumeric>FTA</Th>
-                                                                <Th isNumeric>FTM</Th>
-                                                                <Th isNumeric>FT%</Th>
-                                                                <Th isNumeric>ORB</Th>
-                                                                <Th isNumeric>DRB</Th>
-                                                                <Th isNumeric>TRB</Th>
-                                                                <Th isNumeric>AST</Th>
-                                                                <Th isNumeric>TOV</Th>
-                                                                <Th isNumeric>STL</Th>
-                                                                <Th isNumeric>BLK</Th>
-                                                                <Th isNumeric>F</Th>
+                                                                <Th>OPPONENT</Th>
+                                                                <Th>SCORE</Th>
+                                                                <Th>DIFF</Th>
+                                                                <Th>W/L</Th>
+                                                                <Th>BOX SCORE</Th>
+                                                                <Th>PACE</Th>
+                                                                <Th>ORTG</Th>
+                                                                <Th>DRTG</Th>
+                                                                <Th>FGM</Th>
+                                                                <Th>FGA</Th>
+                                                                <Th>FG%</Th>
+                                                                <Th>2FGM</Th>
+                                                                <Th>2FGA</Th>
+                                                                <Th>2FG%</Th>
+                                                                <Th>Paint FGM</Th>
+                                                                <Th>Paint FGA</Th>
+                                                                <Th>Paint FG%</Th>
+                                                                <Th>3FGM</Th>
+                                                                <Th>3FGA</Th>
+                                                                <Th>3FG%</Th>
+                                                                <Th>FTM</Th>
+                                                                <Th>FTA</Th>
+                                                                <Th>FT%</Th>
+                                                                <Th>ORB</Th>
+                                                                <Th>DRB</Th>
+                                                                <Th>TRB</Th>
+                                                                <Th>AST</Th>
+                                                                <Th>TOV</Th>
+                                                                <Th>STL</Th>
+                                                                <Th>BLK</Th>
+                                                                <Th>PF</Th>
+                                                                <Th>FB</Th>
+                                                                <Th>POT</Th>
+                                                                <Th>eFG%</Th>
+                                                                <Th>TOV%</Th>
+                                                                <Th>FTR</Th>
+                                                                <Th>ORB%</Th>
+                                                                <Th>PACE</Th>
+                                                                <Th>ORTG</Th>
+                                                                <Th>DRTG</Th>
+                                                                <Th>FGM</Th>
+                                                                <Th>FGA</Th>
+                                                                <Th>FG%</Th>
+                                                                <Th>2FGM</Th>
+                                                                <Th>2FGA</Th>
+                                                                <Th>2FG%</Th>
+                                                                <Th>Paint FGM</Th>
+                                                                <Th>Paint FGA</Th>
+                                                                <Th>Paint FG%</Th>
+                                                                <Th>3FGM</Th>
+                                                                <Th>3FGA</Th>
+                                                                <Th>3FG%</Th>
+                                                                <Th>FTM</Th>
+                                                                <Th>FTA</Th>
+                                                                <Th>FT%</Th>
+                                                                <Th>ORB</Th>
+                                                                <Th>DRB</Th>
+                                                                <Th>TRB</Th>
+                                                                <Th>AST</Th>
+                                                                <Th>TOV</Th>
+                                                                <Th>STL</Th>
+                                                                <Th>BLK</Th>
+                                                                <Th>PF</Th>
+                                                                <Th>FB</Th>
+                                                                <Th>POT</Th>
+                                                                <Th>eFG%</Th>
+                                                                <Th>TOV%</Th>
+                                                                <Th>FTR</Th>
+                                                                <Th>ORB%</Th>
                                                             </Tr>
                                                         </Thead>
                                                         <Tbody>
                                                             {matchList &&
-                                                                matchList.map((match: any, index: number) => (
+                                                                matchList.map((team: any, index: number) => (
                                                                     <Tr key={index}>
-                                                                        <Td>{match.match_date}</Td>
-                                                                        <Td>{match.home_or_away}</Td>
-                                                                        <Td isNumeric>{match.team_opp}</Td>
-                                                                        <Td isNumeric>{match.score}</Td>
-                                                                        <Td isNumeric>{match.diff}</Td>
-                                                                        <Td isNumeric>{match.win_or_lose}</Td>
+                                                                        <Td>{team.match_date}</Td>
+                                                                        <Td>{team.home_or_away}</Td>
                                                                         <Td>
-                                                                            <Link to="#" >Box Score</Link>
+                                                                        <Button 
+                                                                        variant='link' 
+                                                                        color='blue.500' 
+                                                                        onClick={() => handleTeamLinkClick(team)}>
+                                                                            {team.team_opp}
+                                                                        </Button>
                                                                         </Td>
-                                                                        <Td isNumeric>{match.pace}</Td>
-                                                                        <Td isNumeric>{match.ortg}</Td>
-                                                                        <Td isNumeric>{match.drtg}</Td>
-                                                                        <Td isNumeric>{match.efg}</Td>
-                                                                        <Td isNumeric>{match.tovp}</Td>
-                                                                        <Td isNumeric>{match.ftr}</Td>
-                                                                        <Td isNumeric>{match.orbp}</Td>
-                                                                        <Td isNumeric>{match.fgm}</Td>
-                                                                        <Td isNumeric>{match.fga}</Td>
-                                                                        <Td isNumeric>{match.fgp}</Td>
-                                                                        <Td isNumeric>{match.f2gm}</Td>
-                                                                        <Td isNumeric>{match.f2ga}</Td>
-                                                                        <Td isNumeric>{match.f2gp}</Td>
-                                                                        <Td isNumeric>{match.f3gm}</Td>
-                                                                        <Td isNumeric>{match.f3ga}</Td>
-                                                                        <Td isNumeric>{match.f3gp}</Td>
-                                                                        <Td isNumeric>{match.ftm}</Td>
-                                                                        <Td isNumeric>{match.fta}</Td>
-                                                                        <Td isNumeric>{match.ftp}</Td>
-                                                                        <Td isNumeric>{match.orb}</Td>
-                                                                        <Td isNumeric>{match.drb}</Td>
-                                                                        <Td isNumeric>{match.trb}</Td>
-                                                                        <Td isNumeric>{match.ast}</Td>
-                                                                        <Td isNumeric>{match.tov}</Td>
-                                                                        <Td isNumeric>{match.stl}</Td>
-                                                                        <Td isNumeric>{match.blk}</Td>
-                                                                        <Td isNumeric>{match.f}</Td>
-                                                                        <Td isNumeric>{match.pace_opp}</Td>
-                                                                        <Td isNumeric>{match.ortg_opp}</Td>
-                                                                        <Td isNumeric>{match.drtg_opp}</Td>
-                                                                        <Td isNumeric>{match.efg_opp}</Td>
-                                                                        <Td isNumeric>{match.tovp_opp}</Td>
-                                                                        <Td isNumeric>{match.ftr_opp}</Td>
-                                                                        <Td isNumeric>{match.orbp_opp}</Td>
-                                                                        <Td isNumeric>{match.fgm_opp}</Td>
-                                                                        <Td isNumeric>{match.fga_opp}</Td>
-                                                                        <Td isNumeric>{match.fgp_opp}</Td>
-                                                                        <Td isNumeric>{match.f2gm_opp}</Td>
-                                                                        <Td isNumeric>{match.f2ga_opp}</Td>
-                                                                        <Td isNumeric>{match.f2gp_opp}</Td>
-                                                                        <Td isNumeric>{match.f3gm_opp}</Td>
-                                                                        <Td isNumeric>{match.f3ga_opp}</Td>
-                                                                        <Td isNumeric>{match.f3gp_opp}</Td>
-                                                                        <Td isNumeric>{match.ftm_opp}</Td>
-                                                                        <Td isNumeric>{match.fta_opp}</Td>
-                                                                        <Td isNumeric>{match.ftp_opp}</Td>
-                                                                        <Td isNumeric>{match.orb_opp}</Td>
-                                                                        <Td isNumeric>{match.drb_opp}</Td>
-                                                                        <Td isNumeric>{match.trb_opp}</Td>
-                                                                        <Td isNumeric>{match.ast_opp}</Td>
-                                                                        <Td isNumeric>{match.tov_opp}</Td>
-                                                                        <Td isNumeric>{match.stl_opp}</Td>
-                                                                        <Td isNumeric>{match.blk_opp}</Td>
-                                                                        <Td isNumeric>{match.f_opp}</Td>
+                                                                        <Td isNumeric>{team.score}</Td>
+                                                                        <Td isNumeric>{team.diff}</Td>
+                                                                        <Td>{team.win_or_lose}</Td>
+                                                                        <Td>
+                                                                        <Button 
+                                                                        variant='link' 
+                                                                        color='blue.500' 
+                                                                        onClick={() => handleBoxscoreClick(team)}>
+                                                                            Box Score
+                                                                        </Button>
+                                                                        </Td>
+                                                                        <Td isNumeric>{team.pace}</Td>
+                                                                        <Td isNumeric>{team.ortg}</Td>
+                                                                        <Td isNumeric>{team.drtg}</Td>
+                                                                        <Td isNumeric>{team.fgm}</Td>
+                                                                        <Td isNumeric>{team.fga}</Td>
+                                                                        <Td isNumeric>{team.fgp}</Td>
+                                                                        <Td isNumeric>{team.f2gm}</Td>
+                                                                        <Td isNumeric>{team.f2ga}</Td>
+                                                                        <Td isNumeric>{team.f2gp}</Td>
+                                                                        <Td isNumeric>{team.paint_f2gm}</Td>
+                                                                        <Td isNumeric>{team.paint_f2ga}</Td>
+                                                                        <Td isNumeric>{team.paint_f2gp}</Td>
+                                                                        <Td isNumeric>{team.f3gm}</Td>
+                                                                        <Td isNumeric>{team.f3ga}</Td>
+                                                                        <Td isNumeric>{team.f3gp}</Td>
+                                                                        <Td isNumeric>{team.ftm}</Td>
+                                                                        <Td isNumeric>{team.fta}</Td>
+                                                                        <Td isNumeric>{team.ftp}</Td>
+                                                                        <Td isNumeric>{team.orb}</Td>
+                                                                        <Td isNumeric>{team.drb}</Td>
+                                                                        <Td isNumeric>{team.trb}</Td>
+                                                                        <Td isNumeric>{team.ast}</Td>
+                                                                        <Td isNumeric>{team.tov}</Td>
+                                                                        <Td isNumeric>{team.stl}</Td>
+                                                                        <Td isNumeric>{team.blk}</Td>
+                                                                        <Td isNumeric>{team.f}</Td>
+                                                                        <Td isNumeric>{team.fb}</Td>
+                                                                        <Td isNumeric>{team.pot}</Td>
+                                                                        <Td isNumeric>{team.efg}</Td>
+                                                                        <Td isNumeric>{team.tovp}</Td>
+                                                                        <Td isNumeric>{team.ftr}</Td>
+                                                                        <Td isNumeric>{team.orbp}</Td>
+                                                                        <Td isNumeric>{team.pace_opp}</Td>
+                                                                        <Td isNumeric>{team.ortg_opp}</Td>
+                                                                        <Td isNumeric>{team.drtg_opp}</Td>
+                                                                        <Td isNumeric>{team.fgm_opp}</Td>
+                                                                        <Td isNumeric>{team.fga_opp}</Td>
+                                                                        <Td isNumeric>{team.fgp_opp}</Td>
+                                                                        <Td isNumeric>{team.f2gm_opp}</Td>
+                                                                        <Td isNumeric>{team.f2ga_opp}</Td>
+                                                                        <Td isNumeric>{team.f2gp_opp}</Td>
+                                                                        <Td isNumeric>{team.paint_f2ga_opp}</Td>
+                                                                        <Td isNumeric>{team.paint_f2gm_opp}</Td>
+                                                                        <Td isNumeric>{team.paint_f2gp_opp}</Td>
+                                                                        <Td isNumeric>{team.f3gm_opp}</Td>
+                                                                        <Td isNumeric>{team.f3ga_opp}</Td>
+                                                                        <Td isNumeric>{team.f3gp_opp}</Td>
+                                                                        <Td isNumeric>{team.ftm_opp}</Td>
+                                                                        <Td isNumeric>{team.fta_opp}</Td>
+                                                                        <Td isNumeric>{team.ftp_opp}</Td>
+                                                                        <Td isNumeric>{team.orb_opp}</Td>
+                                                                        <Td isNumeric>{team.drb_opp}</Td>
+                                                                        <Td isNumeric>{team.trb_opp}</Td>
+                                                                        <Td isNumeric>{team.ast_opp}</Td>
+                                                                        <Td isNumeric>{team.tov_opp}</Td>
+                                                                        <Td isNumeric>{team.stl_opp}</Td>
+                                                                        <Td isNumeric>{team.blk_opp}</Td>
+                                                                        <Td isNumeric>{team.f_opp}</Td>
+                                                                        <Td isNumeric>{team.fb_opp}</Td>
+                                                                        <Td isNumeric>{team.pot_opp}</Td>
+                                                                        <Td isNumeric>{team.efg_opp}</Td>
+                                                                        <Td isNumeric>{team.tovp_opp}</Td>
+                                                                        <Td isNumeric>{team.ftr_opp}</Td>
+                                                                        <Td isNumeric>{team.orbp_opp}</Td>
                                                                     </Tr>
                                                                 ))}
                                                         </Tbody>
