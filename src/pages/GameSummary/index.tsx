@@ -272,7 +272,7 @@ const GameSummary = () => {
 
             
                <div className='pt-5 pb-5'>
-               <Heading as='h5' size='sm' pb='3'>{matchInfo.team1_name}</Heading>
+               <Heading as='h5' size='sm' pb='3'>{matchInfo.team1_name} Boxscore</Heading>
                <TableContainer>
                <Table size='sm' variant='simple' bgColor='white'>
                <Thead bgColor='#b6bbc4'>

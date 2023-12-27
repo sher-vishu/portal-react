@@ -81,7 +81,6 @@ const handleSeasonClick = (selectedSeason: string) => {
   };
 
   const handlePositionClick = (selectedPosition: string) => {
-   // dispatch(setSelectedPosition(selectedPosition));
     setActivePosition(selectedPosition);
     dispatch(filteredDepostaMatch());
   };

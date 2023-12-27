@@ -1,7 +1,6 @@
 import FilterComponent from '../../components/calendar';
 import Layout from '../Layout/index'
-import MatchByYmd from '../../components/matchYmd';
-import { Divider} from '@chakra-ui/react'
+import ScheduleTable from '../../components/scheduleTable';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const Home = () => {
@@ -20,9 +19,8 @@ const Home = () => {
       <Layout />
       </header>
       <FilterComponent />
-      <Divider borderWidth="1px" orientation="horizontal" color='#c1cfda'/>
-      <div className='p-4'>
-        <MatchByYmd />
+      <div>
+        <ScheduleTable />
         </div>
     </div>
   );

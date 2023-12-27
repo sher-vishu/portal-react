@@ -20,7 +20,7 @@ import {
     VStack,
     Button
 } from '@chakra-ui/react'
-import { setScheduleKey, setSelectedPlayer } from "../../features/match/matchDataSlice";
+import { setScheduleKey } from "../../features/match/matchDataSlice";
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { RootState } from '../../app/store';
 import useApi from "../../services/api.services";
@@ -99,9 +99,9 @@ const PlayerSummary = () => {
     <div className='p-4'>
                         <div className='mt-5 p-4'>
                             <HStack spacing="34px">
-                            <Heading as='h3' size='lg' pb='9'>#{playerInfo.number}</Heading>
+                            <Heading as='h3' size='lg' pb='7'>#{playerInfo.number}</Heading>
                             <VStack alignItems="flex-start">
-                            <Heading as='h3' size='lg' pb='2'>{playerInfo.player_name}</Heading>
+                            <Heading as='h3' size='lg'>{playerInfo.player_name}</Heading>
                             <Text color='#747c83' fontSize='sm'>{teamName}</Text>  
                             </VStack>
                             <TableContainer>

@@ -108,7 +108,7 @@ const TeamSummary = () => {
       };
 
     const handleTeamLinkClick = (team: any) => {
-        dispatch(setSelectedTeam(team.id))
+        dispatch(setSelectedTeam(team))
         navigate('/teamsummary');
       };
 
@@ -116,6 +116,14 @@ const TeamSummary = () => {
         dispatch(setScheduleKey(team.schedule_key))
         navigate('/gamesummary');
       };
+
+      const headers = ['PTS', 'FGM', 'FGA', 'FG%', '2PM', '2PA', '2P%', 'Paint FGM', 'Paint FGA', 
+      'Paint FG%', '3PM', '3PA', '3P%', 'FTM', 'FTA', 'FTP', 'ORB', 'DRB', 'TRB', 'AST', 'TOV', 'STL', 'BLK', 'PF',
+      'FB', 'POT', 'eFG%', 'TOV%', 'FTR', 'ORB%']; 
+
+      const matchList_headers = ['PACE', 'ORTG', 'DRTG', 'FGM', 'FGA', 'FG%', '2FGM', '2FGA', '2FG%', 'Paint FGM',
+      'Paint FGA', 'Paint FG%', '3FGM', '3FGA', '3FG%', 'FTM', 'FTA', 'FT%', 'ORB', 'DRB','TRB', 'AST', 'TOV', 'STL', 
+      'BLK', 'PF', 'FB', 'POT', 'eFG%', 'TOV%', 'FTR', 'ORB%'];
 
     return (
         <div>
@@ -140,6 +148,11 @@ const TeamSummary = () => {
                                                 <TableContainer>
                                                     <Table size='sm' variant='simple' bgColor='white'>
                                                         <Thead bgColor='#b6bbc4'>
+                                                            <Tr>
+                                                                <Th></Th>
+                                                                <Th colSpan={headers.length + 1}>OWN</Th>
+                                                                <Th colSpan={headers.length + 1}>OPP</Th>
+                                                            </Tr>
                                                             <Tr>
                                                                 <Th>SEASON</Th>
                                                                 <Th>GAME</Th>
@@ -173,36 +186,9 @@ const TeamSummary = () => {
                                                                 <Th>TOV%</Th>
                                                                 <Th>FTR</Th>
                                                                 <Th>ORB%</Th>
-                                                                <Th>PTS</Th>
-                                                                <Th>FGM</Th>
-                                                                <Th>FGA</Th>
-                                                                <Th>FG%</Th>
-                                                                <Th>2PM</Th>
-                                                                <Th>2PA</Th>
-                                                                <Th>2P%</Th>
-                                                                <Th>Paint FGM</Th>
-                                                                <Th>Paint FGA</Th>
-                                                                <Th>Paint FG%</Th>
-                                                                <Th>3PM</Th>
-                                                                <Th>3PA</Th>
-                                                                <Th>3P%</Th>
-                                                                <Th>FTM</Th>
-                                                                <Th>FTA</Th>
-                                                                <Th>FTP</Th>
-                                                                <Th>ORB</Th>
-                                                                <Th>DRB</Th>
-                                                                <Th>TRB</Th>
-                                                                <Th>AST</Th>
-                                                                <Th>TOV</Th>
-                                                                <Th>STL</Th>
-                                                                <Th>BLK</Th>
-                                                                <Th>PF</Th>
-                                                                <Th>FB</Th>
-                                                                <Th>POT</Th>
-                                                                <Th>eFG%</Th>
-                                                                <Th>TOV%</Th>
-                                                                <Th>FTR</Th>
-                                                                <Th>ORB%</Th>
+                                                                {headers.map((header, index) => (
+                                                                <Th key={index}>{header}</Th>
+                                                                 ))}
                                                             </Tr>
                                                         </Thead>
                                                         <Tbody>
@@ -346,12 +332,12 @@ const TeamSummary = () => {
                                                                             {player.player}
                                                                         </Button>
                                                                         </Td>
-                                                                        <Td isNumeric>{player.position}</Td>
-                                                                        <Td isNumeric>{player.height}</Td>
-                                                                        <Td isNumeric>{player.weight}</Td>
+                                                                        <Td>{player.position}</Td>
+                                                                        <Td>{player.height}</Td>
+                                                                        <Td>{player.weight}</Td>
                                                                         <Td isNumeric>{player.birth_day}</Td>
-                                                                        <Td isNumeric>{player.country}</Td>
-                                                                        <Td isNumeric>{player.nationality_type}</Td>
+                                                                        <Td>{player.country}</Td>
+                                                                        <Td>{player.nationality_type}</Td>
                                                                         <Td isNumeric>{player.g}</Td>
                                                                         <Td isNumeric>{player.mp}</Td>
                                                                         <Td isNumeric>{player.pts}</Td>
@@ -398,6 +384,11 @@ const TeamSummary = () => {
                                                     <Table size='sm' variant='simple' bgColor='white'>
                                                         <Thead bgColor='#b6bbc4'>
                                                             <Tr>
+                                                                <Th></Th>
+                                                                <Th colSpan={matchList_headers.length + 6}>OWN</Th>
+                                                                <Th colSpan={matchList_headers.length + 5}>OPP</Th>
+                                                            </Tr>
+                                                            <Tr>
                                                                 <Th>MATCH DATE</Th>
                                                                 <Th>H/A</Th>
                                                                 <Th>OPPONENT</Th>
@@ -437,38 +428,9 @@ const TeamSummary = () => {
                                                                 <Th>TOV%</Th>
                                                                 <Th>FTR</Th>
                                                                 <Th>ORB%</Th>
-                                                                <Th>PACE</Th>
-                                                                <Th>ORTG</Th>
-                                                                <Th>DRTG</Th>
-                                                                <Th>FGM</Th>
-                                                                <Th>FGA</Th>
-                                                                <Th>FG%</Th>
-                                                                <Th>2FGM</Th>
-                                                                <Th>2FGA</Th>
-                                                                <Th>2FG%</Th>
-                                                                <Th>Paint FGM</Th>
-                                                                <Th>Paint FGA</Th>
-                                                                <Th>Paint FG%</Th>
-                                                                <Th>3FGM</Th>
-                                                                <Th>3FGA</Th>
-                                                                <Th>3FG%</Th>
-                                                                <Th>FTM</Th>
-                                                                <Th>FTA</Th>
-                                                                <Th>FT%</Th>
-                                                                <Th>ORB</Th>
-                                                                <Th>DRB</Th>
-                                                                <Th>TRB</Th>
-                                                                <Th>AST</Th>
-                                                                <Th>TOV</Th>
-                                                                <Th>STL</Th>
-                                                                <Th>BLK</Th>
-                                                                <Th>PF</Th>
-                                                                <Th>FB</Th>
-                                                                <Th>POT</Th>
-                                                                <Th>eFG%</Th>
-                                                                <Th>TOV%</Th>
-                                                                <Th>FTR</Th>
-                                                                <Th>ORB%</Th>
+                                                                {matchList_headers.map((header, index) => (
+                                                                <Th key={index}>{header}</Th>
+                                                                 ))}
                                                             </Tr>
                                                         </Thead>
                                                         <Tbody>

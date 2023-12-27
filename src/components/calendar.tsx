@@ -120,7 +120,7 @@ const FilterComponent = () => {
             {/* Month */}
             
             <HStack spacing='24px' paddingBottom='5'>
-            <Text>Month</Text>
+            <Text>Period</Text>
             <Stack direction='row' spacing={2} align='center'>
             <Button 
             variant='outline'

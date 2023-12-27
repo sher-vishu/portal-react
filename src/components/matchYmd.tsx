@@ -8,7 +8,6 @@ import { setScheduleKey } from "../features/match/matchDataSlice";
 const MatchByYmd = () => {
     const dispatch = useAppDispatch();
     const filteredMatch = useAppSelector((state: RootState) => state.matchData.filteredMatch);
-    const season = useAppSelector((state: RootState) => state.matchData.season);
   
     const matchesByYmd: Record<string, any[]> = {};
     filteredMatch.forEach((match) => {
@@ -37,7 +36,7 @@ const MatchByYmd = () => {
                     <Text as="b" color='#747c83'>{match.card}</Text>
                     <Link to='/gamesummary'>
                     <IconButton
-                      aria-label='Search database'
+                      aria-label='Icon Button'
                       size='lg'
                       icon={<ChevronRightIcon />}
                       onClick={() =>handleScheduleKey(match.schedule_key)}

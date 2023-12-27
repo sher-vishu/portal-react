@@ -2,9 +2,9 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home/index";
 import Teams from "./pages/Teams/index";
 import GameSummary from "./pages/GameSummary/index";
-import TeamSummary from "./pages/TeamSummary";
+import TeamSummary from "./pages/TeamSummary/index";
 import PlayerRanking from "./pages/PlayerRanking/index";
-import PlayerSummary from "./pages/PlayerSummary";
+import PlayerSummary from "./pages/PlayerSummary/index";
 import TeamRanking from "./pages/TeamRanking/index";
 import Error from "./pages/NoPage/index";
 
