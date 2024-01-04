@@ -20,9 +20,7 @@ import {
   Stack,
   Button
 } from '@chakra-ui/react'
-import { setSeason, 
-  filteredDepostaMatch, 
-  setSelectedTeam } from "../../features/match/matchDataSlice";
+import { setSeason, setSelectedTeam } from "../../features/match/matchDataSlice";
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { RootState } from '../../app/store';
 import useApi from "../../services/api.services";
@@ -34,10 +32,8 @@ const TeamRanking = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const season = useAppSelector((state: RootState) => state.matchData.season);
-  const position = useAppSelector((state: RootState) => state.matchData.position);
   const [teamRank, setTeamRank] = useState<any>([]);
   const [activeSeason, setActiveSeason] = useState('');
-  const [activePosition, setActivePosition] = useState(''); 
   const { token, callApi } = useApi();
 
   useEffect(() => {
@@ -61,12 +57,6 @@ const handleSeasonClick = (selectedSeason: string) => {
   setActiveSeason(selectedSeason);
   };
 
-  const handlePositionClick = (selectedPosition: string) => {
-   // dispatch(setSelectedPosition(selectedPosition));
-    setActivePosition(selectedPosition);
-    dispatch(filteredDepostaMatch());
-  };
-
   const handleLinkClick = (team: ITeamData) => {
     dispatch(setSelectedTeam(team))
     navigate('/teamsummary');
@@ -76,10 +66,10 @@ const handleSeasonClick = (selectedSeason: string) => {
     <div>
        <Layout />
        <div className='mt-5 p-4 pl-12'>
-       <Heading as='h3' size='lg' pb='2'>B League Team Ranking</Heading>
+       <Heading as='h3' size='lg'>B League Team Ranking</Heading>
        </div>
        <div className='p-4 pl-12'>
-       <HStack spacing='24px' paddingBottom='5'>
+       <HStack spacing='24px'>
             <Text fontSize='md'>Season</Text>
             <Stack direction='row' spacing={2} align='center'>
             <Button 
@@ -94,25 +84,6 @@ const handleSeasonClick = (selectedSeason: string) => {
             <Button color='#747c83' variant='outline' bgColor='white' onClick={() => handleSeasonClick('2020-21')}>2020-21</Button>
             <Button color='#747c83' variant='outline' bgColor='white' onClick={() => handleSeasonClick('2019-20')}>2019-20</Button>
             <Button color='#747c83' variant='outline' bgColor='white' onClick={() => handleSeasonClick('2018-19')}>2018-19</Button>
-            </Stack>
-            </HStack>
-            
-            {/* Position */}
-            
-            <HStack spacing='24px'>
-            <Text>Position</Text>
-            <Stack direction='row' spacing={2} align='center'>
-            <Button 
-            bgColor={activePosition === position ? '#334d80' : 'white'}
-            color={activePosition === position ? 'white' : '#747c83'}
-            onClick={() => handlePositionClick('PG')}
-            variant='outline'>
-              PG
-              </Button>
-            <Button color='#747c83' variant='outline' bgColor='white' onClick={() => handlePositionClick('SG')}>SG</Button>
-            <Button color='#747c83' variant='outline' bgColor='white' onClick={() => handlePositionClick('SF')}>SF</Button>
-            <Button color='#747c83' variant='outline' bgColor='white' onClick={() => handlePositionClick('PF')}>PF</Button>
-            <Button color='#747c83' variant='outline' bgColor='white' onClick={() => handlePositionClick('C')}>C</Button>
             </Stack>
             </HStack>
        </div>
@@ -140,7 +111,7 @@ const handleSeasonClick = (selectedSeason: string) => {
                                                                 <Th>L</Th>
                                                                 <Th>W%</Th>
                                                                 <Th>PTS</Th>
-                                                                <Th>OPPONENT PTS</Th>
+                                                                <Th>OPP PTS</Th>
                                                                 <Th>FGM</Th>
                                                                 <Th>FGA</Th>
                                                                 <Th>FG%</Th>

@@ -25,6 +25,7 @@ const FilterComponent = () => {
   const dispatch = useAppDispatch();
   const season = useAppSelector((state: RootState) => state.matchData.season);
   const team = useAppSelector((state: RootState) => state.matchData.team);
+  const selectedTeam = useAppSelector((state: RootState) => state.matchData.selectedTeam);
   const month = useAppSelector((state: RootState) => state.matchData.month);
   const selectedMonth = useAppSelector((state: RootState) => state.matchData.month);
   const [allMatchData, setAllMatchData] = useState([]);
@@ -54,6 +55,7 @@ const FilterComponent = () => {
       } fetchData(season)
     }, [season, token]);
 
+    console.log('selected team: ', selectedTeam);  
 
   const handleSeasonClick = (selectedSeason: string) => {
     dispatch(setSeason(selectedSeason));
@@ -87,6 +89,7 @@ const FilterComponent = () => {
       const response = await callApi('/team_list', params)
         console.log(response['team_list'].length)
         dispatch(setTeam(response['team_list']));
+        dispatch(setSelectedTeam(response['team_list'][0]))
       } catch (error) {
       console.error('Error fetching player data:', error);
     } 

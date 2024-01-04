@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../Layout/index'
 import {
   Tabs,
@@ -18,17 +18,273 @@ import {
   HStack,
   Text,
   Stack,
-  Button
+  Button,
+  chakra 
 } from '@chakra-ui/react'
-import { setSeason, 
+import { 
+  setSeason, 
   setPosition,
   setSelectedPlayer,
   filteredDepostaMatch } from "../../features/match/matchDataSlice";
+import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import {
+      useReactTable,
+      flexRender,
+      getCoreRowModel,
+      getSortedRowModel,
+      ColumnDef,
+      SortingState } from "@tanstack/react-table";
+import { createColumnHelper } from "@tanstack/react-table";
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { RootState } from '../../app/store';
 import useApi from "../../services/api.services";
 import { useNavigate } from 'react-router-dom';
 import { IPlayerRank } from "../../types/player.type";
+
+const columnHelper = createColumnHelper<PlayerRank>();
+
+  type PlayerRank = {
+    index: number;
+    team_name: string;
+    player_name: string;
+    game_count: string;
+    game_start: string;
+    minute_play: string;
+    pts: string;
+    fgm: string;
+    fga: string;
+    fgp: string;
+    f2gm: string;
+    f2ga: string;
+    f2gp: string;
+    paint_f2gm: string;
+    paint_f2ga: string;
+    paint_f2gp: string;
+    f3gm: string;
+    f3ga: string;
+    f3gp: string;
+    ftm: string;
+    fta: string;
+    ftp: string;
+    orb: string;
+    drb: string;
+    trb: string;
+    ast: string;
+    tov: string;
+    stl: string;
+    blk: string;
+    pf: string;
+    fb: string;
+    pot: string;
+};
+  
+  const columns=[
+    columnHelper.accessor("index",{ 
+    cell: (info) => (parseInt(info.row.id) + 1).toString(),
+    header: "#",
+    }),
+    columnHelper.accessor("team_name",{ 
+    cell: (info) => info.getValue(),
+    header: "Team Name",
+    }),
+    columnHelper.accessor("player_name",{
+    cell: (info) => info.getValue(),
+    header: "Player Name",
+    }),
+    columnHelper.accessor("game_count",{
+    cell: (info) => info.getValue(),
+    header: "Games",
+    }),
+    columnHelper.accessor("game_start",{
+    cell: (info) => info.getValue(),
+    header: "GS",
+    }),
+    columnHelper.accessor("minute_play",{
+     cell: (info) => info.getValue(),
+     header: "MP",
+    }),
+    columnHelper.accessor("pts",{
+    cell: (info) => info.getValue(),
+    header: "PTS",
+    }),
+    columnHelper.accessor("fgm",{
+    cell: (info) => info.getValue(),
+    header: "FGM",
+    }),
+    columnHelper.accessor("fga",{
+    cell: (info) => info.getValue(),
+    header: "FGA",
+    }),
+    columnHelper.accessor("fgp",{
+    cell: (info) => info.getValue(),
+    header: "FG%",
+    }),
+    columnHelper.accessor("fgp",{
+    cell: (info) => info.getValue(),
+    header: "FG%",
+    }),
+    columnHelper.accessor("f2gm",{
+    cell: (info) => info.getValue(),
+    header: "2PM",
+    }),
+    columnHelper.accessor("f2ga",{
+    cell: (info) => info.getValue(),
+    header: "2PA",
+    }),
+    columnHelper.accessor("f2gp",{
+    cell: (info) => info.getValue(),
+    header: "2P%",
+   }),
+   columnHelper.accessor("paint_f2gm",{
+    cell: (info) => info.getValue(),
+    header: "Paint FGM",
+    }),
+    columnHelper.accessor("paint_f2ga",{
+    cell: (info) => info.getValue(),
+    header: "Paint FGA",
+    }),
+    columnHelper.accessor("paint_f2gp",{
+    cell: (info) => info.getValue(),
+    header: "Paint FG%",
+    }),
+    columnHelper.accessor("f3gm",{
+    cell: (info) => info.getValue(),
+    header: "3PM",
+    }),
+    columnHelper.accessor("f3ga",{
+    cell: (info) => info.getValue(),
+    header: "3PA",
+    }),
+    columnHelper.accessor("f3gp",{
+    cell: (info) => info.getValue(),
+    header: "3P%",
+    }),
+    columnHelper.accessor("ftm",{
+    cell: (info) => info.getValue(),
+    header: "FTM",
+    }),
+    columnHelper.accessor("fta",{
+    cell: (info) => info.getValue(),
+    header: "FTA",
+    }),
+    columnHelper.accessor("ftp",{
+    cell: (info) => info.getValue(),
+    header: "FTP",
+    }),
+    columnHelper.accessor("orb",{
+    cell: (info) => info.getValue(),
+    header: "ORB",
+    }),
+    columnHelper.accessor("drb",{
+    cell: (info) => info.getValue(),
+    header: "DRB",
+    }),
+    columnHelper.accessor("trb",{
+    cell: (info) => info.getValue(),
+    header: "TRB",
+    }),
+    columnHelper.accessor("ast",{
+    cell: (info) => info.getValue(),
+    header: "AST",
+    }),
+    columnHelper.accessor("tov",{
+    cell: (info) => info.getValue(),
+    header: "TOV",
+    }),
+    columnHelper.accessor("stl",{
+    cell: (info) => info.getValue(),
+    header: "STL",
+    }),
+    columnHelper.accessor("blk",{
+    cell: (info) => info.getValue(),
+    header: "BLK",
+    }),
+    columnHelper.accessor("pf",{
+    cell: (info) => info.getValue(),
+    header: "PF",
+    }),
+    columnHelper.accessor("fb",{
+    cell: (info) => info.getValue(),
+    header: "FB",
+    }),
+    columnHelper.accessor("pot",{
+    cell: (info) => info.getValue(),
+    header: "POT",
+    }),
+  ];
+
+
+export type DataTableProps<Data extends object> = {
+  data: Data[];
+  columns: ColumnDef<Data, any>[];
+};
+
+export function DataTable<Data extends object>
+({ data, 
+   columns
+}: DataTableProps<Data>) {
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const table = useReactTable({
+    columns,
+    data,
+    getCoreRowModel: getCoreRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
+  });
+
+  return (
+    <TableContainer>
+    <Table size='sm' variant='simple' bgColor='white'>
+      <Thead bgColor='#b6bbc4'>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <Tr key={headerGroup.id}>
+            {headerGroup.headers.map((header) => {
+              const meta: any = header.column.columnDef.meta;
+              return (
+                      <Th
+                      key={header.id}
+                      onClick={header.column.getToggleSortingHandler()}
+                      isNumeric={meta?.isNumeric}>
+                      {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                      )}
+                      <chakra.span pl="4">
+                          {header.column.getIsSorted() ? (
+                              header.column.getIsSorted() === "desc" ? (
+                                  <TriangleDownIcon aria-label="sorted descending" />
+                              ) : (
+                                  <TriangleUpIcon aria-label="sorted ascending" />
+                              )
+                          ) : null}
+                      </chakra.span>
+                  </Th>
+              );
+            })}
+          </Tr>
+        ))}
+      </Thead>
+      <Tbody>
+        {table.getRowModel().rows.map((row) => (
+          <Tr key={row.id}>
+            {row.getVisibleCells().map((cell) => {
+              const meta: any = cell.column.columnDef.meta;
+              return (
+                <Td key={cell.id} isNumeric={meta?.isNumeric}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Td>
+              );
+            })}
+          </Tr>
+        ))}
+      </Tbody>
+    </Table>
+    </TableContainer>
+  );
+}
 
 const PlayerRanking = () => {
 
@@ -90,6 +346,7 @@ const handleSeasonClick = (selectedSeason: string) => {
     navigate('/playersummary');
   };
 
+
   return (
     <div>
        <Layout />
@@ -147,7 +404,8 @@ const handleSeasonClick = (selectedSeason: string) => {
                                     <TabPanel padding='0'>
                                         <Card bgColor='#f3f5f8' padding='5'>
                                             <div>
-                                                <TableContainer>
+                                            <DataTable data={playerRank} columns={columns} />
+                                                {/* <TableContainer>
                                                     <Table size='sm' variant='simple' bgColor='white'>
                                                         <Thead bgColor='#b6bbc4'>
                                                             <Tr>
@@ -195,6 +453,7 @@ const handleSeasonClick = (selectedSeason: string) => {
                                                                         <Button 
                                                                         variant='link' 
                                                                         color='blue.500' 
+                                                                        size='sm'
                                                                         onClick={() => handleLinkClick(rank)}>
                                                                             {rank.player_name}
                                                                         </Button>
@@ -233,7 +492,7 @@ const handleSeasonClick = (selectedSeason: string) => {
                                                                 }
                                                         </Tbody>
                                                     </Table>
-                                                </TableContainer>
+                                                </TableContainer> */}
                                             </div>  
                                         </Card>
                                     </TabPanel>

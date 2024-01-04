@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Card,
   Table,
   Thead,
@@ -8,10 +9,10 @@ import { Card,
   TableContainer,
   Button,
   Text } from '@chakra-ui/react'
+import { setSelectedTeam, setScheduleKey } from "../features/match/matchDataSlice";
 import { format } from 'date-fns';
 import { useAppDispatch, useAppSelector } from '../app/hooks'
 import { RootState } from '../app/store';
-import { setScheduleKey } from "../features/match/matchDataSlice";
 import { useNavigate } from 'react-router-dom';
 
  const ScheduleTable = () => {
@@ -19,9 +20,21 @@ import { useNavigate } from 'react-router-dom';
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const filteredMatch = useAppSelector((state: RootState) => state.matchData.filteredMatch);
-  
+  const teamList = useAppSelector((state: RootState) => state.matchData.team);
+  const selectedTeam = useAppSelector((state: RootState) => state.matchData.selectedTeam);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [selectedTeamMatch, setSelectedTeamMatch] = useState<any>([]);  
   const matchesByMonthDate: Record<string, any[]> = {};
+  
+  const tempMatchList:any = [];
   filteredMatch.forEach((match) => {
+    if (match.left_team === selectedTeam.team_name || match.right_team === selectedTeam.team_name) {
+      tempMatchList.push(match);
+    }
+  });
+  console.log('temp match list:', tempMatchList)
+  
+  tempMatchList.forEach((match:any) => {
     const ymd = match.ymd;
     const monthDate = format(new Date(ymd), 'MMMM d');
     
@@ -35,9 +48,10 @@ import { useNavigate } from 'react-router-dom';
     new Set(filteredMatch.map((match) => format(new Date(match.ymd), 'MMMM d')))
   );
 
+  console.log('team list: ', teamList)
   const handleLeftCardClick = (match: any) => {
-    dispatch(setScheduleKey(match.schedule_key))
-    navigate('/gamesummary');
+    dispatch(setSelectedTeam(match))
+    navigate('/teamsummary');
   };
 
   const handleRightCardClick = (match: any) => {
@@ -63,18 +77,16 @@ import { useNavigate } from 'react-router-dom';
               </Tr>
             </Thead>
             <Tbody>
-              {filteredMatch.map((match: any, index: number) => (
+              {teamList.map((match: any, index: number) => (
                 <Tr key={index}>
                   <Td>
-                    <Text as='u'>
                       <Button
                         variant='link'
                         color='blue.500'
                         size='sm'
-                        onClick={() => handleLeftCardClick(match.schedule_key)}>
-                        {match.left_team}
+                        onClick={() => handleLeftCardClick(match)}>
+                         <Text as='u'>{match.team_name}</Text>
                       </Button>
-                    </Text>
                   </Td>
                   {uniqueMonthDates.map((monthDate, idx) => (
                     <Td key={idx}>
@@ -87,7 +99,7 @@ import { useNavigate } from 'react-router-dom';
                           color='white'
                           size='sm'
                           onClick={() => handleRightCardClick(m.schedule_key)}>
-                          vs {m.right_team}
+                          <Text as='u'>vs {m.right_team}</Text>
                         </Button>
                       ))}
                     </Td>
