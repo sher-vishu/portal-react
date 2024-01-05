@@ -20,17 +20,21 @@ import { useNavigate } from 'react-router-dom';
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const filteredMatch = useAppSelector((state: RootState) => state.matchData.filteredMatch);
+  const allMatch = useAppSelector((state: RootState) => state.matchData.allMatches);
   const teamList = useAppSelector((state: RootState) => state.matchData.team);
-  const selectedTeam = useAppSelector((state: RootState) => state.matchData.selectedTeam);
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [selectedTeamMatch, setSelectedTeamMatch] = useState<any>([]);  
+  const selectedTeam = useAppSelector((state: RootState) => state.matchData.selectedTeam);  
   const matchesByMonthDate: Record<string, any[]> = {};
-  
   const tempMatchList:any = [];
-  filteredMatch.forEach((match) => {
-    if (match.left_team === selectedTeam.team_name || match.right_team === selectedTeam.team_name) {
-      tempMatchList.push(match);
-    }
+
+
+  teamList.forEach((t) => {
+    let tempData:any = []
+    allMatch.forEach((match) => {
+      if (match.left_team === t.team_name || match.right_team === t.team_name) {
+        tempData.push(match);
+      }
+    });
+    tempMatchList[t.team_name] = tempData 
   });
   console.log('temp match list:', tempMatchList)
   
@@ -48,9 +52,8 @@ import { useNavigate } from 'react-router-dom';
     new Set(filteredMatch.map((match) => format(new Date(match.ymd), 'MMMM d')))
   );
 
-  console.log('team list: ', teamList)
-  const handleLeftCardClick = (match: any) => {
-    dispatch(setSelectedTeam(match))
+  const handleLeftCardClick = (team: any) => {
+    dispatch(setSelectedTeam(team))
     navigate('/teamsummary');
   };
 
@@ -58,6 +61,16 @@ import { useNavigate } from 'react-router-dom';
     dispatch(setScheduleKey(match.schedule_key))
     navigate('/gamesummary');
   };
+
+  function getTeamData(teamname:any){
+    let tempData:any = []
+    allMatch.forEach((match) => {
+      if (match.left_team === teamname || match.right_team === teamname) {
+        tempData.push(match);
+      }
+    });
+    return tempData
+  }
 
   return (
     <div className='p-5 pl-6 pr-6'>
@@ -77,21 +90,22 @@ import { useNavigate } from 'react-router-dom';
               </Tr>
             </Thead>
             <Tbody>
-              {teamList.map((match: any, index: number) => (
+              {teamList.map((team: any, index: number) => (
                 <Tr key={index}>
                   <Td>
                       <Button
                         variant='link'
                         color='blue.500'
                         size='sm'
-                        onClick={() => handleLeftCardClick(match)}>
-                         <Text as='u'>{match.team_name}</Text>
+                        onClick={() => handleLeftCardClick(team)}>
+                         <Text as='u'>{team.team_name}</Text>
                       </Button>
                   </Td>
                   {uniqueMonthDates.map((monthDate, idx) => (
                     <Td key={idx}>
-                      {matchesByMonthDate[monthDate]?.map((m) => (
-                        m.left_team === match.left_team &&
+                    {tempMatchList[team.team_name]
+                        .filter((match: { ymd: string; }) => match.ymd === monthDate)
+                        .map((m: any) => (
                         <Button
                           key={m.schedule_key}
                           colorScheme='telegram'
@@ -99,7 +113,7 @@ import { useNavigate } from 'react-router-dom';
                           color='white'
                           size='sm'
                           onClick={() => handleRightCardClick(m.schedule_key)}>
-                          <Text as='u'>vs {m.right_team}</Text>
+                          <Text as='u'>vs {m.team_name}</Text>
                         </Button>
                       ))}
                     </Td>
